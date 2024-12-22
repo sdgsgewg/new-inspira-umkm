@@ -1,18 +1,15 @@
 {
     "version": 2,
     "framework": null,
-    "builds": [
-        {
-            "src": "Dockerfile",
-            "use": "@vercel/docker"
-        }
-    ],
+    "functions": {
+        "api/index.php": { "runtime": "vercel-php@1.0.0" }
+    },
     "routes": [
         { "src": "/build/(.*)", "dest": "/public/build/" },
         { "src": "/(.*)", "dest": "/api/index.php" }
     ],
     "public": true,
-    "buildCommand": "apt-get update && apt-get install -y libssl1.1 && vite build",
+    "buildCommand": "vite build",
     "outputDirectory": "public",
     "env": {
         "APP_ENV": "production",
