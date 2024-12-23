@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Laravel Test Deploy</title>
-    <link rel="stylesheet" href={{ asset('build/assets/app.css') }}>
+    <link rel="stylesheet" href="{{ asset('app.css') }}?v={{ time() }}">
 </head>
 
 <body>
