@@ -1,5 +1,6 @@
 * {
     background-color: purple;
+    background: url('../img/book.jpg');
 }
 
 body {
@@ -11,6 +12,7 @@ body {
 }
 
 .box {
+    background: none;
     background-color: blueviolet;
     box-shadow: 0 12px 12px 5px black;
     color: aliceblue;
@@ -21,7 +23,9 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
+    background: none;
     background-color: blueviolet;
 }
 

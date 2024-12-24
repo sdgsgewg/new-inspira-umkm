@@ -10,8 +10,6 @@
 </head>
 
 <body>
-    {{ asset('css/app.css') }}
-
     <div class="box">
         <h1>Test Deploy</h1>
         <h2>Saye Upin</h2>
