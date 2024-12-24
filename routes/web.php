@@ -23,10 +23,6 @@ Route::get('/test-env', function () {
     dd(env('PUSHER_APP_KEY'), env('PUSHER_APP_CLUSTER'));
 });
 
-Route::view(('/test'), function() {
-    return view('test');
-});
-
 Route::get('/', [AppController::class, 'home'])->name('home');
 Route::get('/about', [AppController::class, 'about'])->name('about');
 
