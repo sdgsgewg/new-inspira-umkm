@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Laravel Test Deploy</title>
     <link rel="stylesheet" href="{{ secure_asset('css/app.css') }}">
-    {{-- <link rel="stylesheet" href="../css/app.css"> --}}
 </head>
 
 <body>
@@ -18,6 +17,7 @@
         <h2>Saye Upin</h2>
         <h2>Ini Adik Saya Ipin</h2>
         <h3>Ini Kisah Kami Semue</h3>
+        <h4>Hehehhehe</h4>
     </div>
 </body>
 
