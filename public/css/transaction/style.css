@@ -1,0 +1,49 @@
+.nav-item-order {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link-order {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.badge {
+    position: absolute;
+    right: 10%;
+    visibility: hidden;
+    opacity: 0;
+    min-width: 24px;
+    min-height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-left: auto;
+    transition: visibility 0s, opacity 0.2s ease-in-out;
+}
+
+.nav-item-order:hover .badge {
+    visibility: visible;
+    opacity: 1;
+}
+
+.transaction-card .card {
+    width: 100%;
+    height: fit-content;
+}
+
+.img-no-order {
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+}
+
+.img-wrapper {
+    height: 100%;
+    overflow: hidden;
+}
+
+.card-info p {
+    margin: 0;
+}

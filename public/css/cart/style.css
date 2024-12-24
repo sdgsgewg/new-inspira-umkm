@@ -1,0 +1,106 @@
+.checkbox {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    transform: scale(1);
+    -webkit-appearance: none;
+    background-color: #fff;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.checkbox:checked {
+    background-color: #007bff;
+    border: 2px solid #0056b3;
+}
+
+.checkbox:checked::after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.card {
+    width: 100%;
+    height: 20vh;
+}
+
+.img-no-order {
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+}
+
+.img-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.btn-decrement,
+.btn-increment {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+/* Desktop */
+@media screen and (min-width: 1440px) {
+    .checkbox {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+/* Laptop */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+    .checkbox {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .checkbox {
+        width: 23px;
+        height: 23px;
+    }
+
+    .checkbox:checked::after {
+        left: 7px;
+        top: 3px;
+    }
+}
+
+/* Mobile Phone */
+@media screen and (max-width: 767px) {
+    .checkbox {
+        width: 20px;
+        height: 20px;
+    }
+
+    .checkbox:checked::after {
+        left: 6px;
+        top: 2px;
+    }
+
+    .btn-decrement,
+    .btn-increment {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+}
