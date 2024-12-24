@@ -1,7 +1,6 @@
 @extends('layouts.main')
 
-@section('container')
-
+@section('css')
     <style>
         .chat-card {
             transition: background-color 0.2s;
@@ -19,7 +18,9 @@
             object-fit: cover;
         }
     </style>
+@endsection
 
+@section('container')
     <div class="row justify-content-center mt-5">
         <div class="col-11">
             <h1 class="pb-2 border-bottom">{{ $title }}</h1>
@@ -42,10 +43,10 @@
                         {{-- Recipient Profile Picture --}}
                         <div class="col-2 col-lg-1 overflow-hidden" style="height:100%;">
                             @if ($recipient->image)
-                                <img src="{{ asset('storage/' . $recipient->image) }}" alt="{{ $recipient->name }}"
+                                <img src="{{ secure_asset('storage/' . $recipient->image) }}" alt="{{ $recipient->name }}"
                                     class="rounded-circle profile-img">
                             @else
-                                <img src="{{ asset('img/' . $recipient->gender . ' icon.png') }}"
+                                <img src="{{ secure_asset('img/' . $recipient->gender . ' icon.png') }}"
                                     alt="{{ $recipient->name }}" class="rounded-circle profile-img">
                             @endif
                         </div>

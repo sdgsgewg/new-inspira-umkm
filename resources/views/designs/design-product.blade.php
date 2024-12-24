@@ -1,16 +1,18 @@
 @extends('layouts.main')
 
-@section('container')
-    <link rel="stylesheet" href="{{ asset('css/designs/style.css') }}?v={{ time() }}">
+@section('css')
+    <link rel="stylesheet" href="{{ secure_asset('css/designs/style.css') }}?v={{ time() }}">
+@endsection
 
+@section('container')
     {{-- Display Product Big Image --}}
     <div class="row justify-content-center my-5">
         <div class="col-11">
             <div class="img-wrapper rounded-4 overflow-hidden" style="width: auto; height:450px;">
                 @if ($product->image)
-                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                    <img src="{{ secure_asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                 @else
-                    <img src="{{ asset('img/' . $product->name . '.jpg') }}" alt="{{ $product->name }}">
+                    <img src="{{ secure_asset('img/' . $product->name . '.jpg') }}" alt="{{ $product->name }}">
                 @endif
             </div>
         </div>
@@ -61,6 +63,8 @@
             </div>
         </div>
     @endif
+@endsection
 
+@section('scripts')
     @include('components.designs.design-script')
 @endsection

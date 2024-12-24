@@ -5,10 +5,10 @@
         <div class="d-flex mt-1">
             <div class="align-items-start rounded-circle overflow-hidden" style="width: 50px; height: 50px;">
                 @if ($review->user->image)
-                    <img src="{{ asset('storage/' . $review->user->image) }}" alt="{{ $review->user->name }}"
+                    <img src="{{ secure_asset('storage/' . $review->user->image) }}" alt="{{ $review->user->name }}"
                         style="width: 100%; height: 100%; object-fit: cover;">
                 @else
-                    <img src="{{ asset('img/' . $review->user->gender . ' icon.png') }}" alt="{{ $review->user->name }}"
+                    <img src="{{ secure_asset('img/' . $review->user->gender . ' icon.png') }}" alt="{{ $review->user->name }}"
                         style="width: 100%; height: 100%; object-fit: cover;">
                 @endif
             </div>

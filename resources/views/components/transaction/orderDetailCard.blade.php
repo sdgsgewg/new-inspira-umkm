@@ -16,9 +16,9 @@
             <div class="d-flex flex-row">
                 <div class="img-wrapper col-3 col-lg-2">
                     @if ($design->image)
-                        <img src="{{ asset('storage/' . $design->image) }}" alt="...">
+                        <img src="{{ secure_asset('storage/' . $design->image) }}" alt="...">
                     @else
-                        <img src="{{ asset('img/' . $design->product->name) . '.jpg' }}" alt="...">
+                        <img src="{{ secure_asset('img/' . $design->product->name) . '.jpg' }}" alt="...">
                     @endif
                 </div>
                 <div class="card-info col-9 col-lg-10 ps-4 d-flex flex-column justify-content-between">

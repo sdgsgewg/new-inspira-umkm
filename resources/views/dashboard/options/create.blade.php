@@ -32,6 +32,8 @@
             <button type="submit" class="btn btn-primary">Create Option</button>
         </form>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.dashboard.option-script')
 @endsection

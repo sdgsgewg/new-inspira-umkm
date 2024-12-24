@@ -47,10 +47,10 @@
                 <div class="image-container d-flex align-items-center justify-content-center rounded-4 p-3 w-100">
                     <div class="overflow-hidden w-100 h-100">
                         @if ($p->image)
-                        <img src="{{ asset('storage/' . $p->image) }}" alt="{{ $p->name }}"
+                        <img src="{{ secure_asset('storage/' . $p->image) }}" alt="{{ $p->name }}"
                             class="w-100 h-100 object-fit-cover">
                         @else
-                        <img src="{{ asset('img/product/' . $p->slug . '.png') }}" alt="{{ $p->name }}"
+                        <img src="{{ secure_asset('img/product/' . $p->slug . '.png') }}" alt="{{ $p->name }}"
                             class="w-100 h-100 object-fit-cover">
                         @endif
                     </div>

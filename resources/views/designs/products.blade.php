@@ -15,7 +15,7 @@
                             $url = '../../img/';
                             ?>
                             @if ($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
+                                <img src="{{ secure_asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             @else
                                 <img src="{{ $url . $product->name . '.jpg' }}"

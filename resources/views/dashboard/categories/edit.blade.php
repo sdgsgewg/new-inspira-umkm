@@ -44,25 +44,11 @@
                 </select>
             </div>
 
-            {{-- <div class="mb-3">
-                <label for="image" class="form-label">Category Image</label>
-                <input type="hidden" name="oldImage" value="{{ $category->image }}">
-                @if ($category->image)
-                    <img src="{{ asset('storage/' . $category->image) }}"
-                        class="img-preview img-fluid mb-3 col-sm-5 d-block">
-                @else
-                    <img class="img-preview img-fluid mb-3 col-sm-5">
-                @endif
-                <input class="form-control @error('image') is-invalid @enderror" type="file" id="image"
-                    name="image" onchange="previewImage()">
-                @error('image')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div> --}}
-
             <button type="submit" class="btn btn-primary">Update Category</button>
         </form>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.dashboard.category-script')
 @endsection

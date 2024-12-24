@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('container')
+@section('css')
     <style>
         .img-wrapper {
             width: 240px;
@@ -15,7 +15,9 @@
             }
         }
     </style>
+@endsection
 
+@section('container')
     <div class="row justify-content-center">
         <div class="col-11 col-md-8 col-lg-7 pb-2 mt-5 mb-4 border-bottom">
             <h1 class="h2">{{ $title }}</h1>
@@ -35,10 +37,10 @@
                     <input type="hidden" name="oldImage" value="{{ $user->image }}">
                     <div class="img-wrapper img-thumbnail rounded-circle overflow-hidden mb-3 col-5 col-sm-6 col-md-5">
                         @if ($user->image)
-                            <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}"
+                            <img src="{{ secure_asset('storage/' . $user->image) }}" alt="{{ $user->name }}"
                                 class="img-preview rounded-circle">
                         @else
-                            <img src="{{ asset('img/' . $user->gender . ' icon.png') }}" alt="{{ $user->name }}"
+                            <img src="{{ secure_asset('img/' . $user->gender . ' icon.png') }}" alt="{{ $user->name }}"
                                 class="img-preview rounded-circle">
                         @endif
                     </div>
@@ -102,6 +104,8 @@
             </div>
         </form>
     </div>
+@endsection
 
-    <script src="{{ asset('js/users/script.js') }}?v={{ time() }}"></script>
+@section('scripts')
+    <script src="{{ secure_asset('js/users/script.js') }}?v={{ time() }}"></script>
 @endsection

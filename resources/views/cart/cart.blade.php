@@ -1,9 +1,10 @@
 @extends('layouts.main')
 
+@section('css')
+    <link rel="stylesheet" href="{{ secure_asset('css/cart/style.css') }}?v={{ time() }}">
+@endsection
+
 @section('container')
-
-    <link rel="stylesheet" href="{{ asset('css/cart/style.css') }}?v={{ time() }}">
-
     <div class="row justify-content-center mt-5">
         <div class="col-11 col-md-10 col-lg-8 d-flex flex-column">
             <h1>{{ $title }}</h1>
@@ -55,7 +56,7 @@
             @else
                 <div class="d-flex flex-column align-items-center">
                     <div class="img-no-order">
-                        <img src="{{ asset('img/emptyCart.png') }}" alt="">
+                        <img src="{{ secure_asset('img/emptyCart.png') }}" alt="">
                     </div>
                     <h5 class="mt-1">@lang('cart.cart_empty')</h5>
                 </div>
@@ -63,6 +64,8 @@
 
         </div>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.cart.cart-script')
 @endsection

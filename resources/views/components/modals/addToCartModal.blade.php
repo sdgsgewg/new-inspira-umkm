@@ -18,7 +18,7 @@
                 </div>
                 <div class="modal-body d-flex flex-column justify-content-center align-items-center">
                     <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img src="{{ asset('img/tick-2.png') }}" alt="">
+                        <img src="{{ secure_asset('img/tick-2.png') }}" alt="">
                     </div>
                     <div class="fs-5 fw-bold mt-4">
                         {{ session('success') }}

@@ -18,7 +18,7 @@
             <div class="card position-relative col-12">
                 {{-- Icon Centang --}}
                 <div class="tick position-absolute rounded-circle overflow-hidden">
-                    <img src="{{ asset('img/tick-2.png') }}" alt="">
+                    <img src="{{ secure_asset('img/tick-2.png') }}" alt="">
                 </div>
                 <div class="card-body d-flex flex-column">
                     {{-- Informasi penting transaksi --}}

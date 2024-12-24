@@ -3,9 +3,9 @@
     <div class="col-4">
         <div class="img-wrapper col-md-4">
             @if ($design['image'])
-                <img src="{{ asset('storage/' . $design['image']) }}" class="rounded-start" alt="...">
+                <img src="{{ secure_asset('storage/' . $design['image']) }}" class="rounded-start" alt="...">
             @else
-                <img src="{{ asset('img/' . $design['product']['name']) . '.jpg' }}" class="rounded-start" alt="...">
+                <img src="{{ secure_asset('img/' . $design['product']['name']) . '.jpg' }}" class="rounded-start" alt="...">
             @endif
         </div>
     </div>

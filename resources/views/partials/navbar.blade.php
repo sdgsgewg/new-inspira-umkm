@@ -14,7 +14,7 @@
     <div class="col-12 d-flex justify-content-between px-5 py-2">
         <a class="navbar-brand d-inline-flex align-items-center d-lg-none" href="{{ route('home') }}">
             <div class="d-flex align-items-center overflow-hidden" style="width: 40px; height: 40px;">
-                <img src="{{ asset('img/inspira.png') }}" alt=""
+                <img src="{{ secure_asset('img/inspira.png') }}" alt=""
                     style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="ms-2">
@@ -39,7 +39,7 @@
                     <li class="nav-item mb-3 mb-lg-0">
                         <div class="d-flex align-items-center" style="width: 40px; height: 40px;">
                             <a class="nav-link {{ Request::is('/') ? 'active' : '' }} p-0" href="{{ route('home') }}">
-                                <img src="{{ asset('img/inspira.png') }}" alt=""
+                                <img src="{{ secure_asset('img/inspira.png') }}" alt=""
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             </a>
                         </div>

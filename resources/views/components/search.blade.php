@@ -35,4 +35,4 @@
 
 <div class="position-relative searchResults{{ $id }}"></div>
 
-<script src="{{ asset('js/designs/search.js') }}?v={{ time() }}"></script>
+<script src="{{ secure_asset('js/designs/search.js') }}?v={{ time() }}"></script>

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ asset('css/designs/style.css') }}?v={{ time() }}">
+<link rel="stylesheet" href="{{ secure_asset('css/designs/style.css') }}?v={{ time() }}">
 
 <div class="row justify-content-center my-5">
     <div class="col-11 col-md-6 d-flex flex-column ">

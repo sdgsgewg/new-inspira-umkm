@@ -33,7 +33,8 @@
 
             <div class="mb-3">
                 <label for="product" class="form-label">Product</label>
-                <select id="product" class="form-select @error('product_id') is-invalid @enderror" name="product_id" required>
+                <select id="product" class="form-select @error('product_id') is-invalid @enderror" name="product_id"
+                    required>
                     @foreach ($products as $product)
                         @if (old('product_id', $design->product_id) == $product->id)
                             <option value="{{ $product->id }}" selected>{{ $product->name }}</option>
@@ -79,7 +80,7 @@
                 <label for="image" class="form-label">Design Image</label>
                 <input type="hidden" name="oldImage" value="{{ $design->image }}">
                 @if ($design->image)
-                    <img src="{{ asset('storage/' . $design->image) }}"
+                    <img src="{{ secure_asset('storage/' . $design->image) }}"
                         class="img-preview img-fluid mb-3 col-sm-5 d-block">
                 @else
                     <img class="img-preview img-fluid mb-3 col-sm-5">
@@ -104,6 +105,8 @@
             <button type="submit" class="btn btn-primary">Update Design</button>
         </form>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.dashboard.design-script')
 @endsection

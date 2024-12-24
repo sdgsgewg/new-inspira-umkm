@@ -19,9 +19,9 @@
 
             <div class="img-thumbnail rounded-circle overflow-hidden mb-4" style="width: 200px; height: 200px;">
                 @if ($user->image)
-                    <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="rounded-circle">
+                    <img src="{{ secure_asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="rounded-circle">
                 @else
-                    <img src="{{ asset('img/' . $user->gender . ' icon.png') }}" alt="{{ $user->name }}"
+                    <img src="{{ secure_asset('img/' . $user->gender . ' icon.png') }}" alt="{{ $user->name }}"
                         class="rounded-circle">
                 @endif
             </div>

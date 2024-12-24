@@ -1,8 +1,10 @@
 @extends('layouts.main')
 
-@section('container')
-    <link rel="stylesheet" href="{{ asset('css/designs/style.css') }}?v={{ time() }}">
+@section('css')
+    <link rel="stylesheet" href="{{ secure_asset('css/designs/style.css') }}?v={{ time() }}">
+@endsection
 
+@section('container')
     <div class="row justify-content-center mt-4">
         <div class="col-11">
             <div class="d-flex flex-row" style="height: 100px;">
@@ -10,10 +12,10 @@
                     <div class="align-items-start img-thumbnail rounded-circle overflow-hidden"
                         style="width: 100px; height: 100px;">
                         @if ($seller->image)
-                            <img src="{{ asset('storage/' . $seller->image) }}" alt="{{ $seller->name }}"
+                            <img src="{{ secure_asset('storage/' . $seller->image) }}" alt="{{ $seller->name }}"
                                 class="rounded-circle">
                         @else
-                            <img src="{{ asset('img/' . $seller->gender . ' icon.png') }}" alt="{{ $seller->name }}"
+                            <img src="{{ secure_asset('img/' . $seller->gender . ' icon.png') }}" alt="{{ $seller->name }}"
                                 class="rounded-circle">
                         @endif
                     </div>

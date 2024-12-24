@@ -55,6 +55,8 @@
             <button type="submit" class="btn btn-primary">Create Category</button>
         </form>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.dashboard.category-script')
 @endsection

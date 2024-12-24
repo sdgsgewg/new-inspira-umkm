@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 {{-- Color Mode (Light/Dark) --}}
-<script src="{{ asset('js/color-modes.js') }}"></script>
+<script src="{{ secure_asset('js/color-modes.js') }}"></script>
 
 {{-- Midtrans --}}
 <!-- TODO: Remove ".sandbox" from script src URL for production environment. Also input your client key in "data-client-key" -->

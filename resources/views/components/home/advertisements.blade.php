@@ -16,8 +16,6 @@
     }
 </style>
 
-
-
 <div class="row justify-content-center my-5">
     <div class="col-11 position-relative">
         @php
@@ -34,7 +32,7 @@
                 @for ($i = 0; $i < $advertisements; $i++)
                     <div class="carousel-item @if ($i === 0) active @endif">
                     <div class="img-wrapper rounded-4 overflow-hidden" style="width: auto; height:350px;">
-                        <img src="{{ asset('img/Accessories.jpg') }}" class="d-block w-100 rounded-4"
+                        <img src="{{ secure_asset('img/Accessories.jpg') }}" class="d-block w-100 rounded-4"
                             alt="">
                     </div>
             </div>

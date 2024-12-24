@@ -1,8 +1,10 @@
 @extends('layouts.main')
 
-@section('container')
-    <link rel="stylesheet" href="{{ asset('css/cart/style.css') }}?v={{ time() }}">
+@section('css')
+    <link rel="stylesheet" href="{{ secure_asset('css/cart/style.css') }}?v={{ time() }}">
+@endsection
 
+@section('container')
     <div class="row justify-content-center mt-5">
         <div class="col-11 col-md-8 col-lg-6">
             <div class="card p-4 h-100">

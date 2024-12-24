@@ -69,6 +69,8 @@
             <button type="submit" class="btn btn-primary">Update Option Value</button>
         </form>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.dashboard.option-value-script')
 @endsection

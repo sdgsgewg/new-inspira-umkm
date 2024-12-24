@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12 col-md">
             <div class="d-flex align-items-center overflow-hidden" style="width: 50px; height: 50px;">
-                <img src="{{ asset('img/inspira.png') }}" alt="">
+                <img src="{{ secure_asset('img/inspira.png') }}" alt="">
             </div>
             <small class="d-block mb-3 text-body-secondary">&copy; 2024</small>
         </div>

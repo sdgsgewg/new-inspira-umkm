@@ -1,8 +1,10 @@
 @extends('layouts.main')
 
-@section('container')
-    <link rel="stylesheet" href="{{ asset('css/transaction/style.css') }}?v={{ time() }}">
+@section('css')
+    <link rel="stylesheet" href="{{ secure_asset('css/transaction/style.css') }}?v={{ time() }}">
+@endsection
 
+@section('container')
     <div class="row justify-content-center mt-5">
         <div class="col-11 col-md-10 d-flex flex-column">
             @include('components.transaction.transaction-header')
@@ -19,6 +21,8 @@
             @include('components.transaction.noOrderReq')
         </div>
     </div>
+@endsection
 
-    <script src="{{ asset('js/transaction/script.js') }}?v={{ time() }}"></script>
+@section('scripts')
+    <script src="{{ secure_asset('js/transaction/script.js') }}?v={{ time() }}"></script>
 @endsection

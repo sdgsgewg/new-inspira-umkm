@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/designs/style.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/designs/style.css') }}?v={{ time() }}">
 @endsection
 
 @section('container')
@@ -24,10 +24,10 @@
                 <div class="col-4 overflow-hidden">
                     @if ($design->image)
                         <div style="max-height: 350px; overflow:hidden">
-                            <img src="{{ asset('storage/' . $design->image) }}" alt="{{ $design->name }}" class="img-fluid">
+                            <img src="{{ secure_asset('storage/' . $design->image) }}" alt="{{ $design->name }}" class="img-fluid">
                         </div>
                     @else
-                        <img src="{{ asset('img/' . $design->product->name . '.jpg') }}" alt="{{ $design->name }}"
+                        <img src="{{ secure_asset('img/' . $design->product->name . '.jpg') }}" alt="{{ $design->name }}"
                             width="1200" height="400" class="img-fluid">
                     @endif
                 </div>

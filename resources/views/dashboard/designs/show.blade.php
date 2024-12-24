@@ -25,10 +25,10 @@
                 <div class="d-flex flex-row mt-4" style="max-height: 350px;">
                     <div class="col-4 overflow-hidden" style="height: 100%;">
                         @if ($design->image)
-                            <img src="{{ asset('storage/' . $design->image) }}" alt="{{ $design->category->name }}"
+                            <img src="{{ secure_asset('storage/' . $design->image) }}" alt="{{ $design->category->name }}"
                                 class="img-fluid">
                         @else
-                            <img src="{{ asset('img/' . $design->product->name . '.jpg') }}"
+                            <img src="{{ secure_asset('img/' . $design->product->name . '.jpg') }}"
                                 alt="{{ $design->category->name }}" style="width: 100%; height: 100%; object-fit:cover;">
                         @endif
                     </div>

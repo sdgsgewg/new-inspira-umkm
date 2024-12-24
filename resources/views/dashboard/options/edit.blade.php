@@ -33,6 +33,8 @@
             <button type="submit" class="btn btn-primary">Update Option</button>
         </form>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.dashboard.option-script')
 @endsection

@@ -7,7 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>InspiraUMKM | Dashboard</title>
 
-    @include('vendors.dashboards')
+    @include('vendors.dashboard.css')
+    @include('vendors.dashboard.js')
 </head>
 
 <body>
@@ -16,6 +17,8 @@
     @include('partials.theme')
 
     @include('dashboard.layouts.header')
+
+    @yield('css');
 
     <div class="container-fluid">
         <div class="row">
@@ -27,11 +30,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
-    <script src="{{ asset('js/dashboard.js') }}"></script>
-    <script src="{{ asset('js/color-modes.js') }}"></script>
+    @yield('scripts')
 </body>
 
 </html>

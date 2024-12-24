@@ -49,7 +49,8 @@
 
             <div class="mb-3">
                 <label for="category" class="form-label">Category</label>
-                <select id="category" class="form-select @error('genre_id') is-invalid @enderror" name="category_id" required>
+                <select id="category" class="form-select @error('genre_id') is-invalid @enderror" name="category_id"
+                    required>
                     <option value="">Select a category</option>
                     <!-- Categories will be dynamically loaded here -->
                 </select>
@@ -98,6 +99,8 @@
             <button type="submit" class="btn btn-primary">Create Design</button>
         </form>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.dashboard.design-script')
 @endsection

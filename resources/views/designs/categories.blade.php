@@ -10,14 +10,11 @@
                     <a href="{{ route('designs.index', ['category' => $category->slug]) }}" class="w-100">
                         <div class="card text-bg-dark h-100" style="width: 100%; height: 300px;">
 
-                            <?php
-                            $url = '../../img/';
-                            ?>
                             @if ($category->image)
-                                <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                                <img src="{{ secure_asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             @else
-                                <img src="{{ $url . $category->name . '.jpg' }}" alt="{{ $category->name }}"
+                                <img src="{{ secure_asset('img/' . $category->name . '.jpg') }}" alt="{{ $category->name }}"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             @endif
 

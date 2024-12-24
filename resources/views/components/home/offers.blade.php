@@ -57,7 +57,7 @@
     <div class="col-11">
         <div class="card offer-card d-flex flex-row">
             <div class="col-4 col-md-3">
-                <img src="{{ asset('img/Drink.jpg') }}" alt="">
+                <img src="{{ secure_asset('img/Drink.jpg') }}" alt="">
             </div>
             <div class="col-8 col-md-9 d-flex flex-column justify-content-evenly align-items-start ps-4 ps-md-5 py-2">
                 <p class="fs-4 fs-lg-3 text-uppercase fw-bold m-0">Bundle : Packaging + Stickers</p>
