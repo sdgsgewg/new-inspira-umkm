@@ -20,8 +20,10 @@ class DashboardDesignController extends Controller
      */
     public function index()
     {
+        $designs = Design::where('seller_id', Auth::user()->id)->paginate(10);
+
         return view('dashboard.designs.index', [
-            'designs' => Design::where('seller_id', Auth::user()->id)->get()
+            'designs' => $designs
         ]);
     }
 
@@ -51,10 +53,6 @@ class DashboardDesignController extends Controller
             'image' => 'image|file|max:1024',
             'description' => 'required'
         ]);
-
-        // if($request->file('image')) {
-        //     $validatedData['image'] = $request->file('image')->store('design-images');
-        // }
 
         if ($request->file('image')) {
             try {
@@ -133,11 +131,28 @@ class DashboardDesignController extends Controller
 
         $validatedData = $request->validate($rules);
 
-        if($request->file('image')) {
-            if($request->oldImage) {
-                Storage::delete($request->oldImage);
+        if ($request->file('image')) {
+            // Hapus gambar lama dari Cloudinary jika ada
+            if ($design->image) {
+                try {
+                    // Ekstrak public ID dari URL gambar lama
+                    $publicId = basename($design->image, '.' . pathinfo($design->image, PATHINFO_EXTENSION));
+                    Cloudinary::destroy("design-images/{$publicId}");
+                } catch (\Exception $e) {
+                    return redirect()->back()->with('error', 'Failed to delete old image: ' . $e->getMessage());
+                }
             }
-            $validatedData['image'] = $request->file('image')->store('design-images');
+    
+            // Upload gambar baru ke Cloudinary
+            try {
+                $upload = Cloudinary::upload($request->file('image')->getRealPath(), [
+                    'folder' => 'design-images'
+                ]);
+    
+                $validatedData['image'] = $upload->getSecurePath();
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Upload failed: ' . $e->getMessage());
+            }
         }
 
         $validatedData['seller_id'] = Auth::user()->id;
@@ -155,9 +170,17 @@ class DashboardDesignController extends Controller
 
     public function destroy(Design $design)
     {
-        if($design->image) {
-            Storage::delete($design->image);
+        if ($design->image) {
+            try {
+                // Ekstrak public ID dari URL gambar
+                $publicId = basename($design->image, '.' . pathinfo($design->image, PATHINFO_EXTENSION));
+                Cloudinary::destroy("design-images/{$publicId}");
+            } catch (\Exception $e) {
+                return redirect()->route('admin.designs.index')->with('error', 'Failed to delete image: ' . $e->getMessage());
+            }
         }
+
+        // Hapus design dari database
         Design::destroy($design->id);
 
         return redirect()->route('admin.designs.index')->with('success', __('dashboard.design_deleted'));

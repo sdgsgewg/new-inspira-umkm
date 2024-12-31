@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -78,11 +79,35 @@ class UserController extends Controller
 
         $validatedData = $request->validate($rules);
 
-        if($request->file('image')) {
-            if($request->oldImage) {
-                Storage::delete($request->oldImage);
+        // if($request->file('image')) {
+        //     if($request->oldImage) {
+        //         Storage::delete($request->oldImage);
+        //     }
+        //     $validatedData['image'] = $request->file('image')->store('user-images');
+        // }
+
+        if ($request->file('image')) {
+            // Hapus gambar lama dari Cloudinary jika ada
+            if ($user->image) {
+                try {
+                    // Ekstrak public ID dari URL gambar lama
+                    $publicId = basename($user->image, '.' . pathinfo($user->image, PATHINFO_EXTENSION));
+                    Cloudinary::destroy("user-images/{$publicId}");
+                } catch (\Exception $e) {
+                    return redirect()->back()->with('error', 'Failed to delete old image: ' . $e->getMessage());
+                }
             }
-            $validatedData['image'] = $request->file('image')->store('user-images');
+    
+            // Upload gambar baru ke Cloudinary
+            try {
+                $upload = Cloudinary::upload($request->file('image')->getRealPath(), [
+                    'folder' => 'user-images'
+                ]);
+    
+                $validatedData['image'] = $upload->getSecurePath();
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Upload failed: ' . $e->getMessage());
+            }
         }
 
         User::where('id', $user->id)->update($validatedData);
