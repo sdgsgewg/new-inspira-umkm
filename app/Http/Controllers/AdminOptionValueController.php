@@ -53,7 +53,7 @@ class AdminOptionValueController extends Controller
         session(['option_id' => $request->option_id]);
 
         return redirect()->route('admin.option-values.index')
-        ->with('success', 'New option value has been added!');
+        ->with('success', __('dashboard.option_value_created'));
     }
 
     /**
@@ -99,7 +99,7 @@ class AdminOptionValueController extends Controller
         session(['option_id' => $request->option_id]);
 
         return redirect()->route('admin.option-values.index')
-        ->with('success', 'Option value has been updated!');
+        ->with('success', __('dashboard.option_value_updated'));
     }
 
     /**
@@ -109,7 +109,7 @@ class AdminOptionValueController extends Controller
     {
         OptionValue::destroy($optionValue->id);
 
-        return redirect()->route('admin.option-values.index')->with('success', 'Option value has been deleted!');
+        return redirect()->route('admin.option-values.index')->with('success', __('dashboard.option_value_deleted'));
     }
 
     public function checkSlug(Request $request)

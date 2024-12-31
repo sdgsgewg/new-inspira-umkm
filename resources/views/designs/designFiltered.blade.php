@@ -21,6 +21,8 @@
             @endif
         </div>
     </div>
+@endsection
 
+@section('scripts')
     @include('components.designs.design-script')
 @endsection

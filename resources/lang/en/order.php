@@ -25,6 +25,7 @@ return [
     'View Detail' => 'View Detail',
     'statusLabels' => [
         'Awaiting Payment' => 'Awaiting Payment',
+        'Pay Now' => 'Pay Now',
         'Review' => 'Review',
         'Process Order' => 'Process Order',
         'Confirm Delivery' => 'Confirm Delivery',
@@ -59,7 +60,8 @@ return [
     'Received Time' => 'Received Time',
     'Completion Time' => 'Completion Time',
 
-    // Order Modal
+    // Order Status Message
+    'payment_cancelled' => 'Please pay your order immediately',
     'order_created' => 'Order has been created',
     'order_received' => 'Order has been received',
     'transaction_updated' => 'Transaction status updated',

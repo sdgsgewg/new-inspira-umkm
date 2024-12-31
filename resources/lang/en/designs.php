@@ -15,7 +15,7 @@ return [
         // Packaging
         'Primary' => 'Primary',
         'Secondary' => 'Secondary',
-    'Tertiary' => 'Tertiary',
+        'Tertiary' => 'Tertiary',
         'Eco-Friendly' => 'Eco-Friendly',
 
         // Banners

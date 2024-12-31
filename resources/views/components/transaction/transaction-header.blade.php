@@ -5,7 +5,8 @@
     <ul class="nav nav-underline nav-fill d-flex justify-content-between" data-selected-status="{{ $selectedStatus }}">
         @foreach ($allStatus as $s)
             <li class="nav-item nav-item-order position-relative">
-                <a class="nav-link nav-link-order me-2" href="#" data-status="{{ $s }}">@lang('order.status.' . $s)</a>
+                <a class="nav-link nav-link-order me-2" href="#"
+                    data-status="{{ $s }}">@lang('order.status.' . $s)</a>
                 <span class="badge bg-primary text-white rounded-circle">{{ $numTransactionByStatus[$s] ?? 0 }}</span>
             </li>
         @endforeach
@@ -17,6 +18,11 @@
 @if (session()->has('success'))
     <div class="alert alert-success alert-dismissible fade show col-md-12" role="alert">
         {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@elseif (session()->has('failed'))
+    <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
+        {{ session('failed') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif

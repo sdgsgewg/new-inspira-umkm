@@ -5,7 +5,8 @@
             @if ($design['image'])
                 <img src="{{ secure_asset('storage/' . $design['image']) }}" class="rounded-start" alt="...">
             @else
-                <img src="{{ secure_asset('img/' . $design['product']['name']) . '.jpg' }}" class="rounded-start" alt="...">
+                <img src="{{ secure_asset('img/' . $design['product']['name']) . '.jpg' }}" class="rounded-start"
+                    alt="...">
             @endif
         </div>
     </div>

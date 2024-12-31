@@ -2,17 +2,19 @@
 
 @section('container')
     <div class="d-flex flex-column justify-content-between align-items-start gap-2 pt-3 pb-3 mb-3 border-bottom">
-        <h1 class="h2">Create New Design</h1>
+        <h1 class="h2">@lang('dashboard.create_new_design')</h1>
 
         <a href="{{ route('admin.designs.index') }}" class="btn btn-success d-inline-flex"><i
-                class="bi bi-arrow-left me-2"></i> Cancel</a>
+                class="bi bi-arrow-left me-2"></i>@lang('dashboard.cancel')</a>
     </div>
 
     <div class="col-lg-8">
         <form method="POST" action="{{ route('admin.designs.index') }}" class="mb-5" enctype="multipart/form-data">
             @csrf
+
+            {{-- Title --}}
             <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
+                <label for="title" class="form-label">@lang('dashboard.title')</label>
                 <input type="text" class="form-control @error('title') is-invalid @enderror" id="title"
                     name="title" required autofocus value="{{ old('title') }}">
                 @error('title')
@@ -20,8 +22,9 @@
                 @enderror
             </div>
 
+            {{-- Slug --}}
             <div class="mb-3">
-                <label for="slug" class="form-label">Slug</label>
+                <label for="slug" class="form-label">@lang('dashboard.slug')</label>
                 <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug"
                     required value="{{ old('slug') }}">
                 @error('slug')
@@ -29,17 +32,22 @@
                 @enderror
             </div>
 
+            {{-- Product --}}
             <div class="mb-3">
-                <label for="product" class="form-label">Product</label>
+                <label for="product" class="form-label">@lang('dashboard.product')</label>
                 <select id="product" class="form-select @error('product_id') is-invalid @enderror" name="product_id"
                     required>
-                    <option value="">Select a product</option>
+                    <option value="">@lang('dashboard.select_product')</option>
                     @foreach ($products as $product)
-                        @if (old('product_id') == $product->id)
-                            <option value="{{ $product->id }}" selected>{{ $product->name }}</option>
-                        @else
-                            <option value="{{ $product->id }}">{{ $product->name }}</option>
-                        @endif
+                        <option value="{{ $product->id }}"
+                            {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                            @php
+                                $productName = Lang::has('designs.products.' . $product->name)
+                                    ? __('designs.products.' . $product->name)
+                                    : $product->name;
+                            @endphp
+                            {{ $productName }}
+                        </option>
                     @endforeach
                 </select>
                 @error('product_id')
@@ -47,20 +55,22 @@
                 @enderror
             </div>
 
+            {{-- Category --}}
             <div class="mb-3">
-                <label for="category" class="form-label">Category</label>
-                <select id="category" class="form-select @error('genre_id') is-invalid @enderror" name="category_id"
+                <label for="category" class="form-label">@lang('dashboard.category')</label>
+                <select id="category" class="form-select @error('category_id') is-invalid @enderror" name="category_id"
                     required>
-                    <option value="">Select a category</option>
+                    <option value="">@lang('dashboard.select_category')</option>
                     <!-- Categories will be dynamically loaded here -->
                 </select>
                 @error('category_id')
-                    <div class="invalid-feedback">The category field is required</div>
+                    <div class="invalid-feedback">@lang('dashboard.category_required')</div>
                 @enderror
             </div>
 
+            {{-- Price --}}
             <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
+                <label for="price" class="form-label">@lang('dashboard.price')</label>
                 <input type="text" class="form-control @error('price') is-invalid @enderror" id="price"
                     name="price" required autofocus value="{{ old('price') }}">
                 @error('price')
@@ -68,8 +78,9 @@
                 @enderror
             </div>
 
+            {{-- Stock --}}
             <div class="mb-3">
-                <label for="stock" class="form-label">Stock</label>
+                <label for="stock" class="form-label">@lang('dashboard.stock')</label>
                 <input type="text" class="form-control @error('stock') is-invalid @enderror" id="stock"
                     name="stock" required autofocus value="{{ old('stock') }}">
                 @error('stock')
@@ -77,8 +88,9 @@
                 @enderror
             </div>
 
+            {{-- Image --}}
             <div class="mb-3">
-                <label for="image" class="form-label">Design Image</label>
+                <label for="image" class="form-label">@lang('dashboard.design_image')</label>
                 <img class="img-preview img-fluid mb-3 col-sm-5">
                 <input class="form-control @error('image') is-invalid @enderror" type="file" id="image"
                     name="image" onchange="previewImage()">
@@ -87,8 +99,9 @@
                 @enderror
             </div>
 
+            {{-- Description --}}
             <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
+                <label for="description" class="form-label">@lang('dashboard.description')</label>
                 @error('description')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -96,7 +109,7 @@
                 <trix-editor input="description"></trix-editor>
             </div>
 
-            <button type="submit" class="btn btn-primary">Create Design</button>
+            <button type="submit" class="btn btn-primary">@lang('dashboard.create_design')</button>
         </form>
     </div>
 @endsection

@@ -24,7 +24,8 @@
                 <div class="col-4 overflow-hidden">
                     @if ($design->image)
                         <div style="max-height: 350px; overflow:hidden">
-                            <img src="{{ secure_asset('storage/' . $design->image) }}" alt="{{ $design->name }}" class="img-fluid">
+                            <img src="{{ secure_asset('storage/' . $design->image) }}" alt="{{ $design->name }}"
+                                class="img-fluid">
                         </div>
                     @else
                         <img src="{{ secure_asset('img/' . $design->product->name . '.jpg') }}" alt="{{ $design->name }}"
@@ -66,6 +67,7 @@
 
                     <div class="d-flex flex-row gap-3 mt-auto">
                         @if (auth()->check() && auth()->user()->id !== $design->seller->id)
+                            {{-- Add to Cart --}}
                             <form action="{{ route('carts.store', ['design' => $design->slug]) }}" method="POST"
                                 class="d-inline">
                                 @csrf
@@ -75,13 +77,15 @@
                                 </button>
                             </form>
 
-                            <form action="{{ route('checkouts.checkoutFromDesign') }}" class="d-inline">
+                            {{-- Checkout --}}
+                            <form action="{{ route('checkouts.checkoutFromDesign') }}" method="POST" class="d-inline">
                                 @csrf
 
                                 <input type="hidden" name="design_id" value="{{ $design->id }}">
 
-                                <button type={{ $design->stock > 0 ? 'submit' : 'button' }}
-                                    class="btn {{ $design->stock > 0 ? 'btn-success' : 'btn-secondary' }} d-inline-flex">
+                                <button type="submit"
+                                    class="btn {{ $design->stock > 0 ? 'btn-success' : 'btn-secondary' }} d-inline-flex"
+                                    {{ $design->stock == 0 ? 'disabled' : '' }}>
                                     <i class="bi bi-bag-check me-2"></i>@lang('designs.checkout')
                                 </button>
                             </form>

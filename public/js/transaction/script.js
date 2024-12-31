@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         if (!activeLink) {
             activeLink = document.querySelector(
-                `.nav-underline .nav-link[data-status=${selectedStatus}]`
+                `.nav-underline .nav-link[data-status="${selectedStatus}"]`
             );
             activeLink.classList.add("active");
         }

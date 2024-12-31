@@ -14,7 +14,7 @@ class Transaction extends Model
     protected $with = ['buyer' , 'seller'];
 
     const STATUSES = [
-        // 'Not Paid',
+        'Not Paid',
         'Pending',
         'Accepted',
         'Delivered',
@@ -24,7 +24,7 @@ class Transaction extends Model
     ];
 
     protected static $allowedTransitions = [
-        'Not Paid' => ['Pending', 'Cancelled'],
+        'Not Paid' => ['Cancelled', 'Pending'],
         'Pending' => ['Accepted'],
         'Accepted' => ['Delivered'],
         'Delivered' => ['Returned', 'Completed'],
@@ -71,6 +71,13 @@ class Transaction extends Model
                     ->withTimestamps();
     }
 
+    public function promotions()
+    {
+        return $this->belongsToMany(Promotion::class, 'transaction_promotions')
+                    ->withPivot('quantity', 'sub_total_price')
+                    ->withTimestamps();
+    }
+
     public function payment()
     {
         return $this->hasOne(Payment::class);
@@ -81,15 +88,15 @@ class Transaction extends Model
         return $this->hasOne(Shipping::class);
     }
 
-    public function getRouteKeyName(): string
-    {
-        return 'order_number';
-    }
-
     public function updateStatus($newStatus)
     {
         $this->transactionStatus = $newStatus;
         $this->save();
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'order_number';
+    }
+    
 }

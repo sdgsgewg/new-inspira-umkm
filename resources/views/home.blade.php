@@ -8,7 +8,7 @@
     @include('components.home.product-list')
 
     {{-- Special Offers --}}
-    @include('components.home.offers')
+    @include('components.home.promotions')
 
-    {{-- <script src="{{ asset('js/ads-slider.js') }}"></script> --}}
+    {{-- <script src="{{ secure_asset('js/ads-slider.js') }}"></script> --}}
 @endsection

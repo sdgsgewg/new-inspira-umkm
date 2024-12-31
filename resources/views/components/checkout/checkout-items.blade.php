@@ -5,11 +5,9 @@
 @foreach ($checkoutItems as $sellerId => $sellerGroup)
     <div class="seller-section">
         <div class="sellerBox d-flex flex-row">
-            <div class="div">
-                <a href="{{ route('designs.seller', ['seller' => $sellerGroup['seller_username']]) }}"
-                    class="text-decoration-none fs-3">
-                    {{ $sellerGroup['seller_name'] }} &rsaquo;</a>
-            </div>
+            <a href="{{ route('designs.seller', ['seller' => $sellerGroup['seller_username']]) }}"
+                class="text-decoration-none fs-3">
+                {{ $sellerGroup['seller_name'] }} &rsaquo;</a>
         </div>
         @foreach ($sellerGroup['items'] as $design)
             @include('components.checkout.checkoutItem', [

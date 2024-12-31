@@ -17,7 +17,12 @@ class LocalizationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = Session::get('locale', config('app.locale'));
+        // Session
+        //$locale = Session::get('locale', config('app.locale'));
+
+        // Cookie
+        $locale = $request->cookie('locale', config('app.locale'));
+        
         App::setLocale($locale);
 
         return $next($request);

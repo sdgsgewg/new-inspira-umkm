@@ -5,6 +5,7 @@
 @endsection
 
 @section('container')
+
     {{-- Display Product Big Image --}}
     <div class="row justify-content-center my-5">
         <div class="col-11">
@@ -63,8 +64,6 @@
             </div>
         </div>
     @endif
-@endsection
 
-@section('scripts')
     @include('components.designs.design-script')
 @endsection

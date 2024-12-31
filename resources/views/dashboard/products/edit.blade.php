@@ -2,10 +2,10 @@
 
 @section('container')
     <div class="d-flex flex-column justify-content-between align-items-start gap-2 pt-3 pb-3 mb-3 border-bottom">
-        <h1 class="h2">Edit Product</h1>
+        <h1 class="h2">@lang('dashboard.edit_product')</h1>
 
         <a href="{{ route('admin.products.index') }}" class="btn btn-success d-inline-flex"><i
-                class="bi bi-arrow-left me-2"></i> Cancel</a>
+                class="bi bi-arrow-left me-2"></i>@lang('dashboard.cancel')</a>
     </div>
 
     <div class="col-lg-8">
@@ -14,7 +14,7 @@
             @method('put')
             @csrf
             <div class="mb-3">
-                <label for="name" class="form-label">Product Name</label>
+                <label for="name" class="form-label">@lang('dashboard.product_name')</label>
                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
                     required autofocus value="{{ old('name', $product->name) }}">
                 @error('name')
@@ -23,7 +23,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="slug" class="form-label">Slug</label>
+                <label for="slug" class="form-label">@lang('dashboard.slug')</label>
                 <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug"
                     required value="{{ old('slug', $product->slug) }}">
                 @error('slug')
@@ -32,10 +32,10 @@
             </div>
 
             <div class="mb-3">
-                <label for="image" class="form-label">Product Image</label>
+                <label for="image" class="form-label">@lang('dashboard.product_image')</label>
                 <input type="hidden" name="oldImage" value="{{ $product->image }}">
                 @if ($product->image)
-                    <img src="{{ secure_asset('storage/' . $product->image) }}"
+                    <img src="{{ asset('storage/' . $product->image) }}"
                         class="img-preview img-fluid mb-3 col-sm-5 d-block">
                 @else
                     <img class="img-preview img-fluid mb-3 col-sm-5">
@@ -47,7 +47,7 @@
                 @enderror
             </div>
 
-            <button type="submit" class="btn btn-primary">Update Product</button>
+            <button type="submit" class="btn btn-primary">@lang('dashboard.update_product')</button>
         </form>
     </div>
 @endsection

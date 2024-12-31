@@ -25,6 +25,7 @@ return [
     'View Detail' => 'Lihat Detail',
     'statusLabels' => [
         'Awaiting Payment' => 'Menunggu Pembayaran',
+        'Pay Now' => 'Bayar Sekarang',
         'Review' => 'Tinjauan',
         'Process Order' => 'Proses Pesanan',
         'Confirm Delivery' => 'Konfirmasi Pengiriman',
@@ -59,6 +60,7 @@ return [
     'Completion Time' => 'Waktu Selesai',
 
     // Order Modal
+    'payment_cancelled' => 'Mohon segera bayar pesanan anda',
     'order_created' => 'Pesanan telah dibuat',
     'order_received' => 'Pesanan telah diterima',
     'transaction_updated' => 'Status transaksi diperbarui',

@@ -46,6 +46,11 @@ class User extends Authenticatable
         return $this->hasMany(Design::class, 'seller_id');
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, 'user_id');
+    }
+
     public function buyerChats()
     {
         return $this->hasMany(Chat::class, 'buyer_id');

@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Design Options</h1>
+        <h1 class="h2">@lang('dashboard.design_options')</h1>
     </div>
 
     @if (session()->has('success'))
@@ -13,23 +13,30 @@
     @endif
 
     <div class="table-responsive small col-lg-6">
-        <a href="{{ route('admin.options.create') }}" class="btn btn-primary mb-3">Create new option</a>
+        <a href="{{ route('admin.options.create') }}" class="btn btn-primary mb-3">@lang('dashboard.create_new_option')</a>
 
         <table class="table table-striped table-sm">
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Option Name</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">@lang('dashboard.option_name')</th>
+                    <th scope="col">@lang('dashboard.action')</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($options as $option)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $option->name }}</td>
                         <td>
+                            @php
+                                $optionName = Lang::has('options.options.' . $option->name)
+                                    ? __('options.options.' . $option->name)
+                                    : $option->name;
+                            @endphp
 
+                            {{ $optionName }}
+                        </td>
+                        <td>
                             <a href="{{ route('admin.options.edit', ['option' => $option->slug]) }}"
                                 class="badge bg-warning">
                                 <i class="bi bi-pencil-square icon"></i>

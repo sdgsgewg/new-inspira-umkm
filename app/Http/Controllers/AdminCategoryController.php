@@ -37,19 +37,14 @@ class AdminCategoryController extends Controller
             'name' => 'required|unique:categories|max:255',
             'slug' => 'required|unique:categories',
             'product_id' => 'required'
-            // 'image' => 'image|file|max:1024'
         ]);
-
-        // if($request->file('image')) {
-        //     $validatedData['image'] = $request->file('image')->store('category-images');
-        // }
 
         Category::create($validatedData);
 
         session(['product_id' => $request->product_id]);
         session()->forget('product_id');
 
-        return redirect()->route('admin.categories.index')->with('success', 'New category has been added!');
+        return redirect()->route('admin.categories.index')->with('success', __('dashboard.category_created'));
     }
 
     /**
@@ -79,7 +74,6 @@ class AdminCategoryController extends Controller
         $rules = [
             'name' => 'required|max:255',
             'product_id' => 'required'
-            // 'image' => 'image|file|max:1024'
         ];
 
         if( $request->slug != $category->slug )
@@ -89,19 +83,12 @@ class AdminCategoryController extends Controller
 
         $validatedData = $request->validate($rules);
 
-        // if($request->file('image')) {
-        //     if($request->oldImage) {
-        //         Storage::delete($request->oldImage);
-        //     }
-        //     $validatedData['image'] = $request->file('image')->store('category-images');
-        // }
-
         Category::where('id', $category->id)->update($validatedData);
 
         session(['product_id' => $request->product_id]);
         session()->forget('product_id');
 
-        return redirect('/dashboard/categories')->with('success', 'Category has been updated!');
+        return redirect()->route('admin.categories.index')->with('success',  __('dashboard.category_updated'));
     }
 
     /**
@@ -114,7 +101,7 @@ class AdminCategoryController extends Controller
         // }
         Category::destroy($category->id);
 
-        return redirect('/dashboard/categories')->with('success', 'Category has been deleted!');
+        return redirect()->route('admin.categories.index')->with('success',  __('dashboard.category_deleted'));
     }
 
     public function checkSlug(Request $request)

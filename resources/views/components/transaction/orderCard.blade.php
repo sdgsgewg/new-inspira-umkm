@@ -15,7 +15,7 @@
     @php
         $statusLabels = [
             'Not Paid' => 'Awaiting Payment',
-            'Pending' => 'Review',
+            'Pending' => $transaction->transaction_status === 'Not Paid' ? 'Pay Now' : 'Review',
             'Accepted' => 'Process Order',
             'Delivered' => 'Confirm Delivery',
             'Returned' => 'Handle Return',
@@ -24,21 +24,39 @@
         ];
     @endphp
 
+    {{-- Navigation for Status Change --}}
     <div class="col-12 mt-2 d-flex flex-row justify-content-end gap-3">
-
-        @if (in_array($transaction->transaction_status, [
-                'Not Paid',
-                'Pending',
-                'Accepted',
-                'Returned',
-                'Completed',
-                'Cancelled',
-            ]))
+        {{-- View Detail Only --}}
+        @if (in_array($transaction->transaction_status, ['Pending', 'Accepted', 'Returned', 'Completed', 'Cancelled']))
             <div class="col-12 mt-2 d-flex flex-row justify-content-end">
                 <a href="{{ route('transactions.show', ['transaction' => $transaction]) }}"
                     class="btn btn-primary">@lang('order.View Detail')
                 </a>
             </div>
+            {{-- Not Paid --}}
+        @elseif ($transaction->transaction_status === 'Not Paid')
+            @foreach ($transaction->nextStatuses as $status)
+                {{-- Next Status: Cancelled --}}
+                @if ($status === 'Cancelled')
+                    <form
+                        action="{{ route('transactions.updateStatus', ['transaction' => $transaction->order_number]) }}"
+                        method="POST">
+                        @csrf
+                        <input name="choice" type="hidden" value="{{ $status }}">
+                        <button type="submit"
+                            class="btn {{ in_array($status, ['Cancelled', 'Returned']) ? 'btn-danger' : 'btn-primary' }}">
+                            @lang('order.statusLabels.' . $statusLabels[$status] ?? $status)
+                        </button>
+                    </form>
+                    {{-- Next Status: Pending --}}
+                @else
+                    <a href="{{ route('payments.snap', ['transaction' => $transaction->order_number]) }}"
+                        class="btn btn-primary">
+                        @lang('order.statusLabels.' . $statusLabels[$status] ?? $status)
+                    </a>
+                @endif
+            @endforeach
+            {{-- Delivered --}}
         @elseif ($transaction->transaction_status === 'Delivered')
             @if (!$transaction->isReceived)
                 @foreach ($transaction->nextStatuses as $status)

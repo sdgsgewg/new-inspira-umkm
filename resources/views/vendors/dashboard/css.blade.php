@@ -10,5 +10,8 @@
 <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
+{{-- Trix Editor --}}
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+
 {{-- Icon tab url --}}
 <link rel="icon" href="{{ secure_asset('img/inspira.png') }}" type="image/png">

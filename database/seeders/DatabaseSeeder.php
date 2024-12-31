@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
                 OptionValueSeeder::class,
                 PaymentMethodSeeder::class,
                 ShippingMethodSeeder::class,
+                PlanSeeder::class,
+                PromotionSeeder::class,
+                PromotionPlanSeeder::class
             ]
         );
     }

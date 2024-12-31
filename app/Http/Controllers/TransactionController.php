@@ -6,9 +6,11 @@ use App\Models\Cart;
 use App\Models\Design;
 use App\Models\DesignOption;
 use App\Models\Payment;
+use App\Models\Promotion;
 use App\Models\Shipping;
 use App\Models\Transaction;
 use App\Models\TransactionDesign;
+use App\Models\TransactionPromotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
@@ -60,13 +62,10 @@ class TransactionController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    private function storeDesignOptions($optionValues)
     {
         // Masukkan data ke tabel 'design_options'
-        $optionValues = json_decode($request->optionValues, true);
+        $optionValues = json_decode($optionValues, true);
 
         foreach ($optionValues as $designId => $options) {
             foreach ($options as $optionId => $optionValueId) {
@@ -77,6 +76,84 @@ class TransactionController extends Controller
                 $designOption->save();
             }
         }
+    }
+
+    private function storeTransaction($sellerId, $subTotalPrice, $serviceFee, $totalPrice, $notes)
+    {
+        $transaction = Transaction::create([
+            'buyer_id' => Auth::id(),
+            'seller_id' => $sellerId,
+            'total_price' => $subTotalPrice,
+            'service_fee' => $serviceFee,
+            'grand_total_price' => $totalPrice,
+            'transaction_status' => 'Pending',
+            'notes' => $notes
+        ]);
+
+        $transaction->order_number = 'TX-' . now()->format('Ymd') . '-' . str_pad($transaction->id, 6, '0', STR_PAD_LEFT);
+        $transaction->save();
+
+        return $transaction;
+    }
+
+    private function storeTransactionDesign($transactionId, $designId, $quantity, $subTotalPrice) 
+    {
+        TransactionDesign::create([
+            'transaction_id' => $transactionId,
+            'design_id' => $designId,
+            'quantity' => $quantity,
+            'sub_total_price' => $subTotalPrice,
+        ]);
+    }
+
+    private function storeTransactionPromotion($transactionId, $promotionId, $quantity, $subTotalPrice)
+    {
+        TransactionPromotion::create([
+            'transaction_id' => $transactionId,
+            'promotion_id' => $promotionId,
+            'quantity' => $quantity,
+            'sub_total_price' => $subTotalPrice,
+        ]);
+    }
+
+    private function storePayment($transactionId, $payment_method_id, $totalPrice)
+    {
+        $payment = Payment::create([
+            'transaction_id' => $transactionId,
+            'payment_method_id' => $payment_method_id,
+            'amount' => $totalPrice
+        ]);
+        $payment->save();
+    }
+
+    private function storeShipping($transactionId, $shipping_method_id)
+    {
+        $shipping = Shipping::create([
+            'transaction_id' => $transactionId,
+            'shipping_method_id' => $shipping_method_id,
+            'shipping_status' => 'Awaiting Pickup'
+        ]);
+        // Generate tracking number
+        $shipping->tracking_number = $this->generateTrackingNumber($shipping->id, $shipping->shipping_method_id);
+        $shipping->save();
+    }
+    
+    private function generateTrackingNumber($shippingId, $shippingMethodId)
+    {
+        $prefix = strtoupper(substr(md5($shippingMethodId), 0, 4)); // Generate prefix dari shipping method
+        $timestamp = now()->format('YmdHis'); // Format tanggal dan waktu
+        $uniqueId = str_pad($shippingId, 6, '0', STR_PAD_LEFT); // ID shipping dengan leading zeros
+
+        return "{$prefix}-{$timestamp}-{$uniqueId}";
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        // Masukkan data ke tabel 'design_options'
+        $this->storeDesignOptions($request->optionValues);
 
         $checkoutItems = json_decode($request->checkoutItems, true);
 
@@ -85,21 +162,10 @@ class TransactionController extends Controller
         foreach ($checkoutItems as $sellerId => $sellerGroup) {
 
             // Masukkan data ke tabel 'transactions'
-            $transaction = Transaction::create([
-                'buyer_id' => Auth::id(),
-                'seller_id' => $sellerId,
-                'total_price' => $request->subTotalPrice,
-                'service_fee' => $request->serviceFee,
-                'grand_total_price' => $request->totalPrice,
-                'transaction_status' => 'Pending',
-                'notes' => $request->notes
-            ]);
-
-            $transaction->order_number = 'TX-' . now()->format('Ymd') . '-' . str_pad($transaction->id, 6, '0', STR_PAD_LEFT);
-            $transaction->save();
+            $transaction = $this->storeTransaction($sellerId, $request->subTotalPrice, $request->serviceFee, $request->totalPrice, $request->notes);
 
             foreach ($sellerGroup['items'] as $design) {
-                if ($request->source === 'DesignDetail') {
+                if ($request->source !== 'Cart') {
                     $quantity = $request->quantity;
                 } else {
                     $quantity = $design['pivot']['quantity'];
@@ -112,36 +178,22 @@ class TransactionController extends Controller
                 $designModel->save();
 
                 // Masukkan data ke tabel 'transaction_designs'
-                TransactionDesign::create([
-                    'transaction_id' => $transaction->id,
-                    'design_id' => $design['id'],
-                    'quantity' => $quantity,
-                    'sub_total_price' => $design['price'] * $quantity,
-                ]);
+                $this->storeTransactionDesign($transaction->id, $design['id'], $quantity, $design['price'] * $quantity);
 
                 $designIds[] = $design['id'];
             }
         }
 
+        // Masukkan data ke tabel 'transaction_promotions'
+        if ($request->source === 'DesignSelection') {
+            $this->storeTransactionPromotion($transaction->id, $request->promotion_id, $request->quantity, $request->subTotalPrice);
+        }
+
         // Masukkan data ke tabel 'payments'
-        $payment = Payment::create([
-            'transaction_id' => $transaction->id,
-            'payment_method_id' => $request->payment_method_id,
-            'amount' => $request->totalPrice,
-            'payment_status' => 'Paid',
-            'payment_time' => now()
-        ]);
-        $payment->save();
+        $this->storePayment($transaction->id, $request->payment_method_id, $request->totalPrice);
 
         // Masukkan data ke tabel 'shippings'
-        $shipping = Shipping::create([
-            'transaction_id' => $transaction->id,
-            'shipping_method_id' => $request->shipping_method_id,
-            'shipping_status' => 'Awaiting Pickup'
-        ]);
-        // Generate tracking number
-        $shipping->tracking_number = $this->generateTrackingNumber($shipping->id, $shipping->shipping_method_id);
-        $shipping->save();
+        $this->storeShipping($transaction->id, $request->shipping_method_id);
 
         $cart = Cart::where('user_id', Auth::id())->first();
 
@@ -150,11 +202,27 @@ class TransactionController extends Controller
             $cart->designs()->detach($designIds);
         }
 
+        // Set selected status ad Pending
         session(['selectedStatus' => 'Pending']);
 
         $this->processPayment($transaction);
 
         return redirect()->route('payments.snap', ['transaction' => $transaction->order_number]);
+    }
+
+    public function cancelPayment(Transaction $transaction)
+    {
+        // Set Failed Message
+        session()->flash('failed', __('order.payment_cancelled'));
+
+        // Update transaction status
+        $transaction->transaction_status = 'Not Paid';
+        $transaction->save();
+
+        // Set session of selected status
+        session(['selectedStatus' => $transaction->transaction_status]);
+
+        return redirect()->route('transactions.index');
     }
 
     private function processPayment(Transaction $transaction)
@@ -258,6 +326,19 @@ class TransactionController extends Controller
             }
 
         } else if ( in_array( $newStatus, ['Returned', 'Cancelled'] ) ) {
+            // Get Payment Model
+            $paymentModel = $transaction->payment;
+
+            if ($paymentModel) {
+                // Update payment status as Failed
+                $paymentModel->update([
+                    'payment_status' => 'Failed'
+                ]);
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Payment record not found.']);
+            }
+
+            // Reset design stock
             foreach( $transaction->designs as $design ){
                 $designModel = Design::find($design->id);
                 $designModel->stock += $design->pivot->quantity;
@@ -292,15 +373,6 @@ class TransactionController extends Controller
         }
 
         return redirect()->back()->with('error', 'Invalid status transition.');
-    }
-
-    private function generateTrackingNumber($shippingId, $shippingMethodId)
-    {
-        $prefix = strtoupper(substr(md5($shippingMethodId), 0, 4)); // Generate prefix dari shipping method
-        $timestamp = now()->format('YmdHis'); // Format tanggal dan waktu
-        $uniqueId = str_pad($shippingId, 6, '0', STR_PAD_LEFT); // ID shipping dengan leading zeros
-
-        return "{$prefix}-{$timestamp}-{$uniqueId}";
     }
 
     /**

@@ -6,7 +6,7 @@
             <button class="nav-link d-inline-flex py-0 px-3 text-white" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                 aria-label="Toggle navigation">
-                <i class="bi bi-list fs-4"></i>
+                <i class="bi bi-list fs-4 text-white"></i>
             </button>
         </li>
     </ul>

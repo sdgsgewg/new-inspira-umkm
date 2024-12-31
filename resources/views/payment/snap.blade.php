@@ -52,7 +52,20 @@
                         </p>
                     </div>
                 </div>
-                @include('components.checkout.checkout-button', ['navigateTo' => 'pay_now'])
+
+                {{-- Payment Decision --}}
+                <div class="d-flex flex-row align-items-center justify-content-center gap-3">
+                    {{-- Cancel --}}
+                    <a href="{{ route('transactions.cancel', $transaction) }}" class="btn btn-danger">
+                        @lang('checkout.button.cancel')
+                    </a>
+
+                    {{-- Pay Now --}}
+                    <button type="submit" class="btn btn-success text-transform-uppercase" id="pay-button">
+                        {{ __('checkout.button.pay_now') }}
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -66,7 +79,8 @@
 @endsection
 
 @section('scripts')
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}">
+    </script>
 
     <script type="text/javascript">
         document.getElementById('pay-button').onclick = function() {

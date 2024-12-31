@@ -15,8 +15,6 @@
 <body>
     @include('vendors.icons')
 
-    @include('partials.theme')
-
     @include('partials.navbar')
 
     @yield('css')

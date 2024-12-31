@@ -38,7 +38,7 @@ class AdminOptionController extends Controller
 
         Option::create($validatedData);
 
-        return redirect()->route('admin.options.index')->with('success', 'New option has been added!');
+        return redirect()->route('admin.options.index')->with('success',  __('dashboard.option_created'));
     }
 
     /**
@@ -77,7 +77,7 @@ class AdminOptionController extends Controller
 
         Option::where('id', $option->id)->update($validatedData);
 
-        return redirect()->route('admin.options.index')->with('success', 'Option has been updated!');
+        return redirect()->route('admin.options.index')->with('success', __('dashboard.option_updated'));
     }
 
     /**
@@ -87,7 +87,7 @@ class AdminOptionController extends Controller
     {
         Option::destroy($option->id);
 
-        return redirect()->route('admin.options.index')>with('success', 'Option has been deleted!');
+        return redirect()->route('admin.options.index')>with('success', __('dashboard.option_deleted'));
     }
 
     public function checkSlug(Request $request)

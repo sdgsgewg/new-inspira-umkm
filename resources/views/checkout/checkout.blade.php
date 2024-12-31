@@ -5,6 +5,7 @@
 @endsection
 
 @section('container')
+
     <div class="row justify-content-center mt-5">
         <div class="col-11 d-flex flex-column">
             <div class="d-flex flex-row align-items-center">
@@ -46,6 +47,7 @@
                         {{-- Checkout Confirmation --}}
                         <div class="col-12 col-lg-6 d-flex flex-column ps-lg-5 gap-3 mt-4 mt-lg-0">
                             <h3>@lang('checkout.order_confirmation')</h3>
+
                             {{-- Option dari setiap design --}}
                             @include('components.checkout.design-option')
 
@@ -76,7 +78,7 @@
                     {{-- Source Page --}}
                     <input type="hidden" name="source" value="{{ session('fromPage') }}">
 
-                    @if (session('fromPage') === 'DesignDetail')
+                    @if (session('fromPage') !== 'Cart')
                         <input type="hidden" name="quantity" value="{{ $quantity }}">
                     @endif
 

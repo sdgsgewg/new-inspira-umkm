@@ -25,7 +25,12 @@ class Product extends Model
     public function options()
     {
         return $this->belongsToMany(Option::class, 'product_options')->withTimestamps();
-    }    
+    }
+
+    public function promotions()
+    {
+        return $this->belongsToMany(Promotion::class, 'promotion_products');
+    }
 
     public function getRouteKeyName(): string
     {

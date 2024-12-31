@@ -22,6 +22,7 @@ return [
     'button' => [
         'proceed_to_payment' => 'Proceed to Payment',
         'create_order' => 'Create Order',
+        'cancel' => 'Cancel',
         'pay_now' => 'Pay Now',
     ],
 

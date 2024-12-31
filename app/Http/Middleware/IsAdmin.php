@@ -18,7 +18,7 @@ class IsAdmin
     {
         if(!Auth::check() || !Auth::user()->is_admin)
         {
-            abort(403);
+            return redirect()->route('home');
         }
         return $next($request);
     }

@@ -27,9 +27,9 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             if (Auth::user()->is_admin) {
-                return redirect()->intended('/dashboard');
+                return redirect()->route('admin.dashboard');
             } else {
-                return redirect()->intended('/');
+                return redirect()->route('home');
             }
         }
  
@@ -46,6 +46,6 @@ class LoginController extends Controller
     
         $request->session()->regenerateToken();
     
-        return redirect('/');
+        return redirect()->route('home');
     }
 }

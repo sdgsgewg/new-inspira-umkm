@@ -11,6 +11,7 @@
         $products = 0;
     @endphp
 
+    {{-- Designs List --}}
     @foreach ($transaction->designs as $design)
         <div class="col-12 mb-3 d-flex flex-column">
             <div class="d-flex flex-row">
@@ -35,7 +36,6 @@
                         $isSeller = Auth::id() === $transaction->seller->id; // Check if the current user is the seller
                     @endphp
                 </div>
-
             </div>
             @if (!$isSeller && (!$userRating || !$userRating->isRated))
                 <div class="col-12 d-flex flex-row-reverse mt-2">
@@ -50,6 +50,33 @@
             @endif
         </div>
     @endforeach
+
+    {{-- Promotion --}}
+    @if ($transaction->promotions->count())
+        <hr class="mt-1 mb-4">
+        @foreach ($transaction->promotions as $promo)
+            <div class="col-12 mb-3 d-flex flex-column">
+                <div class="d-flex flex-row">
+                    <div class="img-wrapper col-3 col-lg-2">
+                        @if ($promo->image)
+                            <img src="{{ secure_asset('storage/' . $promo->image) }}" alt="...">
+                        @else
+                            <img src="{{ secure_asset('img/Drink.jpg') }}" alt="...">
+                        @endif
+                    </div>
+                    <div class="card-info col-9 col-lg-10 ps-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <h5>{{ $promo->title }}</h5>
+                            <p>x{{ $promo->pivot->quantity }}</p>
+                        </div>
+                        <div>
+                            <p>Rp{{ number_format($promo->price, 0, ',', '.') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    @endif
 
     <hr>
 

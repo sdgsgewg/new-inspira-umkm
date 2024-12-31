@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Design;
 use App\Models\Product;
 use App\Models\Category;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\DB;
 
 class DashboardDesignController extends Controller
 {
@@ -50,15 +52,29 @@ class DashboardDesignController extends Controller
             'description' => 'required'
         ]);
 
-        if($request->file('image')) {
-            $validatedData['image'] = $request->file('image')->store('design-images');
+        // if($request->file('image')) {
+        //     $validatedData['image'] = $request->file('image')->store('design-images');
+        // }
+
+        if ($request->file('image')) {
+            try {
+                // Upload ke Cloudinary
+                $upload = Cloudinary::upload($request->file('image')->getRealPath(), [
+                    'folder' => 'design-images' // Folder di Cloudinary
+                ]);
+        
+                // Menyimpan URL file di database
+                $validatedData['image'] = $upload->getSecurePath();
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Upload failed: ' . $e->getMessage());
+            }
         }
 
         $validatedData['seller_id'] = Auth::user()->id;
 
         Design::create($validatedData);
 
-        return redirect('/dashboard/designs')->with('success', 'New design has been added!');
+        return redirect()->route('admin.designs.index')->with('success', __('dashboard.design_created'));
     }
 
     /**
@@ -66,8 +82,18 @@ class DashboardDesignController extends Controller
      */
     public function show(Design $design)
     {
+        $avgDesignRating = DB::table('design_reviews')
+        ->where('design_id', $design->id)
+        ->avg('rating');
+
+        $soldQuantity = DB::table('transaction_designs')
+        ->where('design_id', $design->id)
+        ->sum('quantity');
+
         return view('dashboard.designs.show', [
-            'design' => $design
+            'design' => $design,
+            'avgDesignRating' => $avgDesignRating,
+            'soldQuantity' => $soldQuantity,
         ]);
     }
 
@@ -118,7 +144,7 @@ class DashboardDesignController extends Controller
 
         Design::where('id', $design->id)->update($validatedData);
 
-        return redirect('/dashboard/designs')->with('success', 'Design has been updated!');
+        return redirect()->route('admin.designs.index')->with('success', __('dashboard.design_updated'));
     }
 
     public function getCategoriesByProduct($productId)
@@ -134,7 +160,7 @@ class DashboardDesignController extends Controller
         }
         Design::destroy($design->id);
 
-        return redirect('/dashboard/designs')->with('success', 'Design has been deleted!');
+        return redirect()->route('admin.designs.index')->with('success', __('dashboard.design_deleted'));
     }
 
     public function checkSlug(Request $request)

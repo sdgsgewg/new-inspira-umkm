@@ -17,13 +17,44 @@ use Illuminate\Support\Facades\Lang;
 
 class DesignController extends Controller
 {
+    // public function index()
+    // {
+    //     $title = 'All Designs';
+    //     $designs = Design::latest()->get();
+
+    //     // Group designs by product and category for display
+    //     $designsByProduct = $designs->groupBy('product_id')->map(fn($productDesigns) => $productDesigns->groupBy('category_id'));
+
+    //     $avgDesignRating = DB::table('designs as d')
+    //             ->leftJoin('design_reviews as dr', 'd.id', '=', 'dr.design_id')
+    //             ->select('d.id')
+    //             ->selectRaw('IFNULL(ROUND(AVG(dr.rating), 2), 0) as avg_rating')
+    //             ->groupBy('d.id')
+    //             ->pluck('avg_rating', 'd.id');
+
+    //     $soldQuantities = DB::table('transaction_designs as td')
+    //             ->join('transactions as t', 'td.transaction_id', '=', 't.id')
+    //             ->select('td.design_id', DB::raw('SUM(td.quantity) as sold_quantity'))
+    //             ->where('t.transaction_status', '=', 'Completed')
+    //             ->groupBy('td.design_id')
+    //             ->pluck('sold_quantity', 'td.design_id');
+
+    //     return view('designs.designs', [
+    //         'title' => $title,
+    //         'designsByProduct' => $designsByProduct,
+    //         'products' => Product::all(),
+    //         'categories' => Category::all(),
+    //         'sellers' => User::has('designs')->get(),
+    //         'user' => Auth::user(),
+    //         'avgDesignRating' => $avgDesignRating,
+    //         'soldQuantities' => $soldQuantities,
+    //     ]);
+    // }
+
     public function index()
     {
         $title = 'All Designs';
-        $designs = Design::latest()->get();
-
-        // Group designs by product and category for display
-        $designsByProduct = $designs->groupBy('product_id')->map(fn($productDesigns) => $productDesigns->groupBy('category_id'));
+        $designs = Design::latest()->paginate(8);
 
         $avgDesignRating = DB::table('designs as d')
                 ->leftJoin('design_reviews as dr', 'd.id', '=', 'dr.design_id')
@@ -41,7 +72,7 @@ class DesignController extends Controller
 
         return view('designs.designs', [
             'title' => $title,
-            'designsByProduct' => $designsByProduct,
+            'designs' => $designs,
             'products' => Product::all(),
             'categories' => Category::all(),
             'sellers' => User::has('designs')->get(),
@@ -234,13 +265,13 @@ class DesignController extends Controller
     {
         $avgDesignRating = DB::table('design_reviews')
         ->where('design_id', $design->id)
-        ->avg('rating');        
+        ->avg('rating');
 
         $soldQuantity = DB::table('transaction_designs')
         ->where('design_id', $design->id)
         ->sum('quantity');
 
-        $comments = Comment::where('design_id', $design->id)->get();
+        $comments = Comment::with(['replies'])->where('design_id', $design->id)->get();
 
         return view('designs.design', [
             'title' => 'Single Design',

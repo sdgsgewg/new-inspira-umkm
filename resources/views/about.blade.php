@@ -11,7 +11,7 @@
 
         .header {
             position: relative;
-            background: url('/img/aboutHeader.jpg') no-repeat center center/cover;
+            background: url('img/aboutHeader.jpg') no-repeat center center/cover;
             height: 400px;
             width: 100vw;
             display: flex;

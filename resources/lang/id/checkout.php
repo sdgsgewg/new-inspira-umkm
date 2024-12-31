@@ -22,6 +22,7 @@ return [
     'button' => [
         'proceed_to_payment' => 'Lanjutkan ke Pembayaran',
         'create_order' => 'Buat Pesanan',
+        'cancel' => 'Batal',
         'pay_now' => 'Bayar Sekarang',
     ],
 

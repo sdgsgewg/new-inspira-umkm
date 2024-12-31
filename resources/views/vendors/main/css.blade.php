@@ -12,7 +12,11 @@
 {{-- Bootstrap Icons --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+{{-- Boostrap Examples --}}
+{{-- Product --}}
 <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/product/" />
+{{-- Pricing --}}
+<link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/pricing/" />
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 

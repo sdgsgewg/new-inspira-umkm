@@ -28,7 +28,7 @@
 
     <div class="img-wrapper">
         @if ($design->image)
-            <img src="{{ secure_asset('storage/' . $design->image) }}" alt="{{ $design->category->name }}">
+            <img src="{{ $design->image }}" alt="{{ $design->category->name }}">
         @else
             <img src="{{ secure_asset('img/' . $design->product->name . '.jpg') }}" alt="{{ $design->category->name }}">
         @endif
