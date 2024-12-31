@@ -24,8 +24,7 @@
                 <div class="col-4 overflow-hidden">
                     @if ($design->image)
                         <div style="max-height: 350px; overflow:hidden">
-                            <img src="{{ secure_asset('storage/' . $design->image) }}" alt="{{ $design->name }}"
-                                class="img-fluid">
+                            <img src="{{ $design->image }}" alt="{{ $design->name }}" class="img-fluid">
                         </div>
                     @else
                         <img src="{{ secure_asset('img/' . $design->product->name . '.jpg') }}" alt="{{ $design->name }}"

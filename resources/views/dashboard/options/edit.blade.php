@@ -12,6 +12,8 @@
         <form method="post" action="{{ route('admin.options.update', ['option' => $option->slug]) }}" class="mb-5">
             @method('put')
             @csrf
+
+            {{-- Name --}}
             <div class="mb-3">
                 <label for="name" class="form-label">@lang('dashboard.option_name')</label>
                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
@@ -21,6 +23,7 @@
                 @enderror
             </div>
 
+            {{-- Slug --}}
             <div class="mb-3">
                 <label for="slug" class="form-label">@lang('dashboard.slug')</label>
                 <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug"

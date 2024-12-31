@@ -22,8 +22,7 @@
                     <div class="seller-photo img-thumbnail rounded-circle overflow-hidden"
                         style="width: 100px; height: 100px;">
                         @if ($seller->image)
-                            <img src="{{ secure_asset('storage/' . $seller->image) }}" alt="{{ $seller->name }}"
-                                class="rounded-circle">
+                            <img src="{{ $seller->image }}" alt="{{ $seller->name }}" class="rounded-circle">
                         @else
                             <img src="{{ secure_asset('img/' . $seller->gender . ' icon.png') }}" alt="{{ $seller->name }}"
                                 class="rounded-circle">

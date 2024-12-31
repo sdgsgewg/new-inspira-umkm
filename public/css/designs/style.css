@@ -122,10 +122,24 @@ img {
     background-color: #d5dade;
 }
 
+/* Product Big Image */
+.product-big-image {
+    width: auto;
+    height: 450px;
+}
+
 /* Extra Large Screens (>= 1200px) - Display 4 cards */
 @media screen and (min-width: 1200px) {
     .carousel-item {
         flex: 0 0 calc((100% - (3 * 20px)) / 4); /* 4 cards with 20px gap */
+    }
+
+    .product-big-image {
+        height: 450px;
+    }
+
+    .img-no-design {
+        width: 350px;
     }
 }
 
@@ -134,6 +148,14 @@ img {
     .carousel-item {
         flex: 0 0 calc((100% - (2 * 20px)) / 3); /* 3 cards with 20px gap */
     }
+
+    .product-big-image {
+        height: 450px;
+    }
+
+    .img-no-design {
+        width: 350px;
+    }
 }
 
 /* Medium Screens (768px - 991px) - Display 2 cards */
@@ -141,12 +163,28 @@ img {
     .carousel-item {
         flex: 0 0 calc((100% - 20px) / 2); /* 2 cards with 20px gap */
     }
+
+    .product-big-image {
+        height: 400px;
+    }
+
+    .img-no-design {
+        width: 320px;
+    }
 }
 
 /* Small Screens (< 768px) - Display 1 card */
 @media screen and (min-width: 576px) and (max-width: 767px) {
     .carousel-item {
         flex: 0 0 calc((100% - 20px) / 2); /* 2 cards with 20px gap */
+    }
+
+    .product-big-image {
+        height: 350px;
+    }
+
+    .img-no-design {
+        width: 300px;
     }
 }
 
@@ -160,5 +198,13 @@ img {
     }
     .carousel-item {
         flex: 1 0 100%; /* Full-width, single card */
+    }
+
+    .product-big-image {
+        height: 250px;
+    }
+
+    .img-no-design {
+        width: 250px;
     }
 }

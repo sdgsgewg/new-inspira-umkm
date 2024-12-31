@@ -89,38 +89,63 @@ class AdminProductController extends Controller
             'name' => 'required|max:255',
             'image' => 'image|file|max:1024'
         ];
-
-        if( $request->slug != $product->slug )
-        {
+    
+        if ($request->slug != $product->slug) {
             $rules['slug'] = 'required|unique:products';
         }
-
+    
         $validatedData = $request->validate($rules);
-
-        if($request->file('image')) {
-            if($request->oldImage) {
-                Storage::delete($request->oldImage);
+    
+        if ($request->file('image')) {
+            // Hapus gambar lama dari Cloudinary jika ada
+            if ($product->image) {
+                try {
+                    // Ekstrak public ID dari URL gambar lama
+                    $publicId = basename($product->image, '.' . pathinfo($product->image, PATHINFO_EXTENSION));
+                    Cloudinary::destroy("product-images/{$publicId}");
+                } catch (\Exception $e) {
+                    return redirect()->back()->with('error', 'Failed to delete old image: ' . $e->getMessage());
+                }
             }
-            $validatedData['image'] = $request->file('image')->store('product-images');
+    
+            // Upload gambar baru ke Cloudinary
+            try {
+                $upload = Cloudinary::upload($request->file('image')->getRealPath(), [
+                    'folder' => 'product-images'
+                ]);
+    
+                $validatedData['image'] = $upload->getSecurePath();
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Upload failed: ' . $e->getMessage());
+            }
         }
-
+    
+        // Update data produk di database
         Product::where('id', $product->id)->update($validatedData);
-
+    
         return redirect()->route('admin.products.index')->with('success', __('dashboard.product_updated'));
-    }
+    }    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Product $product)
     {
-        if($product->image) {
-            Storage::delete($product->image);
+        if ($product->image) {
+            try {
+                // Ekstrak public ID dari URL gambar
+                $publicId = basename($product->image, '.' . pathinfo($product->image, PATHINFO_EXTENSION));
+                Cloudinary::destroy("product-images/{$publicId}");
+            } catch (\Exception $e) {
+                return redirect()->route('admin.products.index')->with('error', 'Failed to delete image: ' . $e->getMessage());
+            }
         }
+    
+        // Hapus produk dari database
         Product::destroy($product->id);
-
+    
         return redirect()->route('admin.products.index')->with('success', __('dashboard.product_deleted'));
-    }
+    }    
 
     public function checkSlug(Request $request)
     {

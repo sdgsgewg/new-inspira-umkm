@@ -37,8 +37,7 @@
                     <input type="hidden" name="oldImage" value="{{ $user->image }}">
                     <div class="img-wrapper img-thumbnail rounded-circle overflow-hidden mb-3 col-5 col-sm-6 col-md-5">
                         @if ($user->image)
-                            <img src="{{ secure_asset('storage/' . $user->image) }}" alt="{{ $user->name }}"
-                                class="img-preview rounded-circle">
+                            <img src="{{ $user->image }}" alt="{{ $user->name }}" class="img-preview rounded-circle">
                         @else
                             <img src="{{ secure_asset('img/' . $user->gender . ' icon.png') }}" alt="{{ $user->name }}"
                                 class="img-preview rounded-circle">

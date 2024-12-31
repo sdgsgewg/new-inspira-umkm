@@ -8,8 +8,15 @@
     {{-- Display Product Big Image --}}
     <div class="row justify-content-center my-5">
         <div class="col-11">
-            <div class="img-wrapper rounded-4 overflow-hidden" style="width: auto; height:450px;">
-                <img src="{{ secure_asset('img/' . $category->product->name . '.jpg') }}" alt="">
+            <div class="product-big-image img-wrapper rounded-4 overflow-hidden">
+                @php
+                    $product = $category->product;
+                @endphp
+                @if ($product->image)
+                    <img src="{{ $product->image }}" alt="{{ $product->name }}">
+                @else
+                    <img src="{{ secure_asset('img/' . $product->name . '.jpg') }}" alt="{{ $product->name }}">
+                @endif
             </div>
         </div>
     </div>

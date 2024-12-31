@@ -35,8 +35,7 @@
                 <label for="image" class="form-label">@lang('dashboard.product_image')</label>
                 <input type="hidden" name="oldImage" value="{{ $product->image }}">
                 @if ($product->image)
-                    <img src="{{ asset('storage/' . $product->image) }}"
-                        class="img-preview img-fluid mb-3 col-sm-5 d-block">
+                    <img src="{{ $product->image }}" class="img-preview img-fluid mb-3 col-sm-5 d-block">
                 @else
                     <img class="img-preview img-fluid mb-3 col-sm-5">
                 @endif
