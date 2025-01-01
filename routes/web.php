@@ -16,19 +16,14 @@ use App\Http\Middleware\LocalizationMiddleware;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
-// Route::middleware([LocalizationMiddleware::class])->group(function () {
-
 // ROUTE BUAT HOME DAN ABOUT PAGE
-
-// Route::get('/test-env', function () {
-//     dd(env('PUSHER_APP_KEY'), env('PUSHER_APP_CLUSTER'));
-// });
 
 Route::get('/', [AppController::class, 'home'])->name('home');
 Route::get('/about', [AppController::class, 'about'])->name('about');
 
 // ROUTE BUAT LOCALIZATION
 
+// SESSION
 // Route::get('/change-language/{lang}', function ($lang) {
 //     if (in_array($lang, ['en', 'id'])) {
 //         Session::put('locale', $lang);
@@ -37,6 +32,7 @@ Route::get('/about', [AppController::class, 'about'])->name('about');
 //     return redirect()->back();
 // })->name('changeLanguage');
 
+// COOKIE
 Route::get('/change-language/{lang}', function ($lang) {
     if (in_array($lang, ['en', 'id'])) {
         return redirect()->back()->withCookie(cookie()->forever('locale', $lang))->with('status', 'Language changed');
@@ -230,5 +226,3 @@ Route::middleware('auth', 'IsAdmin')->prefix('dashboard')->as('admin.')->group(f
     // Manage Subscription Plan
     // Manage Promotion
 });
-
-// });
