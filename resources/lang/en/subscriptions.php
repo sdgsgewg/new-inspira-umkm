@@ -1,12 +1,21 @@
 <?php
 
 return [
+    // My Subscriptions Page
+    'my_subs' => 'My Subscriptions',
+    'until' => 'Until',
+    'payment_via' => 'Payment via',
+    'payment_date' => 'Payment date:',
+    'transaction_date' => 'Transaction date:',
+    'pay_now' => 'Pay',
+
+    // Pricing Page
     'pricing' => 'Pricing',
     'subs_desc' => 'Find the pricing plans that suit your needs. We offer a variety of options with flexible features, designed to provide the best solutions for our customers. Choose the right plan to start your journey with us.',
     'features' => 'Features:',
     'get_started' => 'Get Started',
 
-    // checkout page
+    // Checkout page
     'subs_confirmation' => 'Subscription Confirmation',
 
     'button' => [
@@ -19,6 +28,8 @@ return [
     'name' => 'Plan Name',
     'price' => 'Subscription Price',
     'payment_cancelled' => 'Please pay your subscription package immediately',
+    'loading' => 'Loading...',
+    'process_payment' => 'Processing your payment...',
 
     // Payment Success Page
     'payment_success' => 'Payment Successful',

@@ -16,7 +16,7 @@ return [
     'cart' => 'Keranjang',
     'subscriptions' => 'Langganan',
     'subscribe' => 'Berlangganan VIP',
-    'my_subs' => 'Langganan Saya',
+    'my_subs' => 'Paket Saya',
     'chat' => 'Obrolan',
     'profile' => 'Profil',
     'my_orders' => 'Pesanan Saya',

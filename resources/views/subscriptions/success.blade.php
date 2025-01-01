@@ -79,7 +79,7 @@
                         {{-- View My Subscriptions --}}
 
                         @php
-                            session()->flash('success', __('order.order_created'));
+                            session()->flash('success', __('subscriptions.subs_created'));
                         @endphp
 
                         <a href="{{ route('subscriptions.index') }}" class="btn btn-success">@lang('subscriptions.to_my_subs')</a>

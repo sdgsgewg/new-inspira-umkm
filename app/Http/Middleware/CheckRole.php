@@ -14,7 +14,7 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $role): Response
     {
         // pastikan pengguna sudah login
         if (!Auth::check()) {
@@ -25,8 +25,12 @@ class CheckRole
         $user = Auth::user();
 
         if ($user->is_admin) {
-            return redirect()->route('admin.dashboard');
+            $userRole = 'admin';
         } else {
+            $userRole = 'buyer';
+        }
+
+        if ($userRole !== $role) {
             return redirect()->route('home');
         }
         

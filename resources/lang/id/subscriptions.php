@@ -1,6 +1,15 @@
 <?php
 
 return [
+    // Halaman Langganan Saya
+    'my_subs' => 'Paket Langganan Saya',
+    'until' => 'Hingga',
+    'payment_via' => 'Pembayaran melalui',
+    'payment_date' => 'Tanggal pembayaran:',
+    'transaction_date' => 'Tanggal transaksi:',
+    'pay_now' => 'Bayar',
+
+    // Pricing Page
     'pricing' => 'Harga',
     'subs_desc' => 'Temukan rencana harga yang sesuai dengan kebutuhan Anda. Kami menawarkan berbagai pilihan dengan fitur yang fleksibel, dirancang untuk memberikan solusi terbaik bagi pelanggan kami. Pilih paket yang tepat untuk memulai perjalanan Anda bersama kami.',
     'features' => 'Fitur:',
@@ -19,6 +28,8 @@ return [
     'name' => 'Nama Paket',
     'price' => 'Harga Langganan',
     'payment_cancelled' => 'Mohon segera bayar paaket langganan anda',
+    'loading' => 'Memuat...',
+    'process_payment' => 'Memproses pembayaran Anda...',
 
     // Halaman Sukses Pembayaran
     'payment_success' => 'Pembayaran Berhasil',

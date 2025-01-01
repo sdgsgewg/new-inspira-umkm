@@ -18,8 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'IsAdmin' => \App\Http\Middleware\IsAdmin::class,
+            'IsBuyer' => \App\Http\Middleware\IsBuyer::class,
             'CheckRole' => \App\Http\Middleware\CheckRole::class,
-            'CheckPayment' => \App\Http\Middleware\PaymentMiddleware::class,
+            'CheckSubscriptionPayment' => \App\Http\Middleware\SubscriptionPaymentMiddleware::class,
+            'CheckTransactionPayment' => \App\Http\Middleware\TransactionPaymentMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

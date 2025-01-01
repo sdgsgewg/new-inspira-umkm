@@ -56,7 +56,8 @@
                 {{-- Payment Decision --}}
                 <div class="d-flex flex-row align-items-center justify-content-center gap-3">
                     {{-- Cancel --}}
-                    <a href="{{ route('transactions.cancel', $transaction) }}" class="btn btn-danger">
+                    <a href="{{ route('transactions.payment-cancel', ['transaction' => $transaction->order_number]) }}"
+                        class="btn btn-danger">
                         @lang('checkout.button.cancel')
                     </a>
 
@@ -72,9 +73,9 @@
 
     <div id="payment-loading" class="d-none text-center mt-4">
         <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">@lang('checkout.loading')</span>
         </div>
-        <p>Processing your payment...</p>
+        <p>@lang('checkout.process_payment')</p>
     </div>
 @endsection
 
@@ -90,7 +91,7 @@
             snap.pay('{{ $transaction->snap_token }}', {
                 onSuccess: function(result) {
                     window.location.href =
-                        '{{ route('payments.payment-success', ['transaction' => $transaction->order_number]) }}';
+                        '{{ route('transactions.payment-success', ['transaction' => $transaction->order_number]) }}';
                 },
                 onPending: function(result) {
                     document.getElementById('payment-loading').classList.add('d-none');

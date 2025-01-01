@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     UserController, LoginController, DesignController, ProductController,
@@ -12,7 +11,6 @@ use App\Http\Controllers\{
     SubscriptionController,
     TransactionController
 };
-use App\Http\Middleware\LocalizationMiddleware;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
@@ -95,15 +93,24 @@ Route::middleware('auth')->prefix('subscriptions')->as('subscriptions.')->group(
     Route::get('/pricing', [SubscriptionController::class, 'pricing'])->name('pricing');
 
     // Checkout Page
-    Route::get('/checkout/{plan:slug}', [SubscriptionController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout/{plan:slug}', [SubscriptionController::class, 'checkout'])
+    ->middleware('CheckRole:buyer')
+    ->name('checkout');
     
     // Payment Snap Page
-    Route::get('/snap/{subscription:id}', [SubscriptionController::class, 'payment'])->name('snap');
+    Route::get('/payment/snap/{subscription:id}', [SubscriptionController::class, 'payment'])
+    ->middleware(['CheckRole:buyer', 'CheckSubscriptionPayment'])
+    ->name('snap');
 
-    Route::get('/cancel/{subscription:id}', [SubscriptionController::class, 'cancelPayment'])->name('cancel');
+    // Cancel Payment
+    Route::get('/payment/cancel/{subscription:id}', [SubscriptionController::class, 'cancelPayment'])
+    ->middleware('CheckRole:buyer')
+    ->name('cancel');
 
     // Payment Success Page
-    Route::get('/payment/success/{subscription:id}', [SubscriptionController::class, 'success'])->name('success');
+    Route::get('/payment/success/{subscription:id}', [SubscriptionController::class, 'success'])
+    ->middleware('CheckRole:buyer')
+    ->name('payment-success');
 
     Route::resource('/', SubscriptionController::class)->parameters(['' => 'subscriptions']);
 });
@@ -112,7 +119,9 @@ Route::middleware('auth')->prefix('subscriptions')->as('subscriptions.')->group(
 
 Route::prefix('promotions')->as('promotions.')->group(function() {
     // Show Design Selection Based on Promotion
-    Route::get('/designs/{promotion:id}', [PromotionController::class, 'showDesignSelection'])->name('designs');
+    Route::get('/designs/{promotion:id}', [PromotionController::class, 'showDesignSelection'])
+    ->middleware('CheckRole:buyer')
+    ->name('designs');
 
     Route::resource('/', PromotionController::class)->parameters(['' => 'promotions']);
 });
@@ -132,12 +141,14 @@ Route::middleware('auth')->group(function () {
     // Replies
     Route::resource('/replies', ReplyController::class);
     // Send Feedback
-    Route::post('/sendFeedback', [DesignController::class, 'sendFeedback'])->name('sendFeedback');
+    Route::post('/sendFeedback', [DesignController::class, 'sendFeedback'])
+    ->middleware('CheckRole:buyer')
+    ->name('sendFeedback');
 });
 
 // ROUTE FOR CART
 
-Route::middleware('auth')->prefix('carts')->as('carts.')->group(function () {
+Route::middleware(['auth', 'IsBuyer'])->prefix('carts')->as('carts.')->group(function () {
     // Resource for cart
     Route::resource('/', CartController::class)->parameters(['' => 'cart'])->except(['create', 'edit']);
 
@@ -153,31 +164,21 @@ Route::middleware('auth')->prefix('carts')->as('carts.')->group(function () {
 
 // ROUTE FOR CHECKOUT
 
-Route::middleware('auth')->prefix('checkouts')->as('checkouts.')->group(function () {
+Route::middleware(['auth', 'IsBuyer'])->prefix('checkouts')->as('checkouts.')->group(function () {
     // Checkout from cart
-    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])
+    ->middleware('CheckRole:buyer')
+    ->name('checkout');
 
     // Checkout from design detail page
-    Route::post('/checkout-from-design', [CheckoutController::class, 'checkoutFromDesign'])->name('checkoutFromDesign');
+    Route::post('/checkout-from-design', [CheckoutController::class, 'checkoutFromDesign'])
+    ->middleware('CheckRole:buyer')
+    ->name('checkoutFromDesign');
 
     // Checkout from promotion
-    Route::post('/checkout-from-promo', [CheckoutController::class, 'checkoutFromPromotion'])->name('checkoutFromPromo');
-});
-
-// ROUTE FOR PAYMENT
-
-Route::middleware('auth')->prefix('payments')->as('payments.')->group(function () {
-    // Payment Summary Page
-    Route::post('/payment', [PaymentController::class, 'payment'])->name('payment');
-
-    //Payment Promo Summary Page
-    Route::post('/payment-promo', [PaymentController::class, 'paymentPromo'])->name('paymentPromo');
-
-    // Payment Snap Page
-    Route::get('/snap/{transaction:order_number}', [PaymentController::class, 'processPayment'])->middleware('CheckPayment')->name('snap');
-
-    // Payment Success Page
-    Route::get('/payment/success/{transaction:order_number}', [PaymentController::class, 'handlePaymentSuccess'])->name('payment-success');
+    Route::post('/checkout-from-promo', [CheckoutController::class, 'checkoutFromPromotion'])
+    ->middleware('CheckRole:buyer')
+    ->name('checkoutFromPromo');
 });
 
 // ROUTE FOR TRANSACTION
@@ -187,10 +188,34 @@ Route::middleware('auth')->prefix('transactions')->as('transactions.')->group(fu
     Route::get('/orderRequest', [TransactionController::class, 'orderRequest'])->name('orderRequest');
 
     // Route for update transaction status
-    Route::post('/updateStatus/{transaction:order_number}', [TransactionController::class, 'updateStatus'])->name('updateStatus');
+    Route::post('/updateStatus/{transaction:order_number}', [TransactionController::class, 'updateStatus'])
+    ->middleware('CheckRole:buyer')
+    ->name('updateStatus');
 
-    // Route for cancel payment
-    Route::get('/cancel/{transaction:order_number}', [TransactionController::class, 'cancelPayment'])->name('cancel');
+    // Payment Summary Page
+    Route::post('/payment', [PaymentController::class, 'payment'])
+    ->middleware('CheckRole:buyer')
+    ->name('payment');
+
+    //Payment Promo Summary Page
+    Route::post('/payment-promo', [PaymentController::class, 'paymentPromo'])
+    ->middleware('CheckRole:buyer')
+    ->name('paymentPromo');
+
+    // Payment Snap Page
+    Route::get('/payment/snap/{transaction:order_number}', [PaymentController::class, 'processPayment'])
+    ->middleware(['CheckTransactionPayment', 'CheckRole:buyer'])
+    ->name('snap');
+
+    // Payment Success Page
+    Route::get('/payment/success/{transaction:order_number}', [PaymentController::class, 'handlePaymentSuccess'])
+    ->middleware(['CheckTransactionPayment', 'CheckRole:buyer'])
+    ->name('payment-success');
+
+    // Cancel payment
+    Route::get('/payment/cancel/{transaction:order_number}', [TransactionController::class, 'cancelPayment'])
+    ->middleware(['CheckTransactionPayment', 'CheckRole:buyer'])
+    ->name('payment-cancel');
 
     // Resource Route
     Route::resource('/', TransactionController::class)->parameters(['' => 'transaction']);

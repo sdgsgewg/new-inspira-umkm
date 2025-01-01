@@ -2,12 +2,24 @@
     onclick="window.location.href='{{ route('transactions.show', ['transaction' => $transaction->order_number]) }}'">
 
     <div class="col-12 mb-2 d-flex justify-content-between">
+        {{-- Seller Name --}}
         <h6 class="fw-bold">
             {{ $transaction->seller->name }}
         </h6>
-        <h6 class="text-success-emphasis">
-            @lang('order.status.' . $transaction->transaction_status)
-        </h6>
+        {{-- Transaction Status --}}
+        @if (in_array($transaction->transaction_status, ['Not Paid', 'Returned', 'Cancelled']))
+            <div class="bg-danger rounded-4 fs-6 fw-bold px-3">
+                @lang('order.status.' . $transaction->transaction_status)
+            </div>
+        @elseif (in_array($transaction->transaction_status, ['Pending', 'Accepted', 'Delivered']))
+            <div class="bg-warning rounded-4 text-dark fs-6 fw-bold px-3">
+                @lang('order.status.' . $transaction->transaction_status)
+            </div>
+        @else
+            <div class="bg-success rounded-4 fs-6 fw-bold px-3">
+                @lang('order.status.' . $transaction->transaction_status)
+            </div>
+        @endif
     </div>
 
     @include('components.transaction.cardContent')
@@ -50,7 +62,7 @@
                     </form>
                     {{-- Next Status: Pending --}}
                 @else
-                    <a href="{{ route('payments.snap', ['transaction' => $transaction->order_number]) }}"
+                    <a href="{{ route('transactions.snap', ['transaction' => $transaction->order_number]) }}"
                         class="btn btn-primary">
                         @lang('order.statusLabels.' . $statusLabels[$status] ?? $status)
                     </a>

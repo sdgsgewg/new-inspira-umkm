@@ -22,6 +22,10 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        if(Auth::user()->is_admin) {
+            return redirect()->route('transactions.orderRequest');
+        }
+
         $transactions = Transaction::with('seller', 'designs')
             ->where('buyer_id', Auth::id())
             ->latest()
@@ -52,7 +56,42 @@ class TransactionController extends Controller
             'selectedStatus' => $selectedStatus,
             'numTransactionByStatus' => $numTransactionByStatus
         ]);
-    }    
+    }
+
+    public function orderRequest()
+    {
+        if(!Auth::user()->is_admin) {
+            return redirect()->route('transactions.index');
+        }
+
+        $transactions = Transaction::with('buyer', 'designs')
+            ->where('seller_id', Auth::id())
+            ->latest()
+            ->get()
+            ->map(function ($transaction) {
+                $transaction->nextStatuses = $transaction->getNextStatuses();
+                return $transaction;
+            });
+
+        $allStatus = Transaction::STATUSES;
+
+        // Calculate transaction count per status
+        $numTransactionByStatus = [];
+        foreach ($allStatus as $status) {
+            $numTransactionByStatus[$status] = $transactions->where('transaction_status', $status)->count();
+        }
+
+        $selectedStatus = session('selectedStatus', 'Pending');
+        session()->forget('selectedStatus');
+
+        return view('transaction.orderRequest', [
+            'title' => 'Order Request',
+            'transactions' => $transactions,
+            'allStatus' => $allStatus,
+            'selectedStatus' => $selectedStatus,
+            'numTransactionByStatus' => $numTransactionByStatus,
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -86,7 +125,7 @@ class TransactionController extends Controller
             'total_price' => $subTotalPrice,
             'service_fee' => $serviceFee,
             'grand_total_price' => $totalPrice,
-            'transaction_status' => 'Pending',
+            'transaction_status' => 'Not Paid',
             'notes' => $notes
         ]);
 
@@ -207,7 +246,7 @@ class TransactionController extends Controller
 
         $this->processPayment($transaction);
 
-        return redirect()->route('payments.snap', ['transaction' => $transaction->order_number]);
+        return redirect()->route('transactions.snap', ['transaction' => $transaction->order_number]);
     }
 
     public function cancelPayment(Transaction $transaction)
@@ -262,37 +301,6 @@ class TransactionController extends Controller
         return view('transaction.detail', [
             'title' => 'Transaction Detail',
             'transaction' => $transaction,
-        ]);
-    }
-
-    public function orderRequest()
-    {
-        $transactions = Transaction::with('buyer', 'designs')
-            ->where('seller_id', Auth::id())
-            ->latest()
-            ->get()
-            ->map(function ($transaction) {
-                $transaction->nextStatuses = $transaction->getNextStatuses();
-                return $transaction;
-            });
-
-        $allStatus = Transaction::STATUSES;
-
-        // Calculate transaction count per status
-        $numTransactionByStatus = [];
-        foreach ($allStatus as $status) {
-            $numTransactionByStatus[$status] = $transactions->where('transaction_status', $status)->count();
-        }
-
-        $selectedStatus = session('selectedStatus', 'Pending');
-        session()->forget('selectedStatus');
-
-        return view('transaction.orderRequest', [
-            'title' => 'Order Request',
-            'transactions' => $transactions,
-            'allStatus' => $allStatus,
-            'selectedStatus' => $selectedStatus,
-            'numTransactionByStatus' => $numTransactionByStatus,
         ]);
     }
 

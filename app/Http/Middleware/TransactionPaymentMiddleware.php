@@ -2,14 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Payment;
-use App\Models\Transaction;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class PaymentMiddleware
+class TransactionPaymentMiddleware
 {
     /**
      * Handle an incoming request.
@@ -20,16 +18,18 @@ class PaymentMiddleware
     {
         // Ambil parameter 'transaction' dari route
         $transaction = $request->route('transaction');
+
+        // Ambil data user
+        $user = Auth::user();
+        if ($transaction->buyer !== $user) {
+            return redirect()->route('home');
+        }
     
         // Lakukan pengecekan pada Payment terkait
         $payment = $transaction->payment;
     
-        if ($payment->payment_status === 'Pending') {
-            return redirect()->route('payments.snap', $transaction->order_number);
-        }
-    
         if ($payment->payment_status === 'Paid') {
-            return redirect()->route('payments.payment-success', $transaction->order_number);
+            return redirect()->route('transactions.payment-success', $transaction->order_number);
         }
     
         return $next($request);

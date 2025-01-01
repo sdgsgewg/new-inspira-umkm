@@ -51,9 +51,9 @@
 
     <div id="payment-loading" class="d-none text-center mt-4">
         <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">@lang('subscriptions.loading')</span>
         </div>
-        <p>Processing your payment...</p>
+        <p>@lang('subscriptions.process_payment')</p>
     </div>
 @endsection
 
@@ -68,7 +68,7 @@
             snap.pay('{{ $subsPayment->snap_token }}', {
                 onSuccess: function(result) {
                     window.location.href =
-                        '{{ route('subscriptions.success', ['subscription' => $subscription->id]) }}';
+                        '{{ route('subscriptions.payment-success', ['subscription' => $subscription->id]) }}';
                 },
                 onPending: function(result) {
                     document.getElementById('payment-loading').classList.add('d-none');

@@ -14,7 +14,7 @@
             </div>
             <hr class="mb-4">
 
-            <form method="POST" action="{{ route('payments.paymentPromo') }}" id="checkout-form">
+            <form method="POST" action="{{ route('transactions.paymentPromo') }}" id="checkout-form">
                 @csrf
 
                 @if (count($checkoutItems) > 0)
