@@ -18,10 +18,10 @@
                 <div class="d-flex">
                     <div class="align-items-start rounded-circle overflow-hidden" style="width: 40px; height: 40px;">
                         @if ($reply->user->image)
-                            <img src="{{ secure_asset('storage/' . $reply->user->image) }}" alt="{{ $reply->user->name }}"
+                            <img src="{{ $reply->user->image }}" alt="{{ $reply->user->name }}"
                                 style="width: 100%; height: 100%; object-fit: cover;">
                         @else
-                            <img src="{{ secure_asset('img/' . $reply->user->gender . ' icon.png') }}"
+                            <img src="{{ secure_asset('img/' . $reply->user->gender . '.png') }}"
                                 alt="{{ $reply->user->name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         @endif
                     </div>

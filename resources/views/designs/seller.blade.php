@@ -24,7 +24,7 @@
                         @if ($seller->image)
                             <img src="{{ $seller->image }}" alt="{{ $seller->name }}" class="rounded-circle">
                         @else
-                            <img src="{{ secure_asset('img/' . $seller->gender . ' icon.png') }}" alt="{{ $seller->name }}"
+                            <img src="{{ secure_asset('img/' . $seller->gender . '.png') }}" alt="{{ $seller->name }}"
                                 class="rounded-circle">
                         @endif
                     </div>

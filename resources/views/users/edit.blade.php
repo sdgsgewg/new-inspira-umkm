@@ -39,7 +39,7 @@
                         @if ($user->image)
                             <img src="{{ $user->image }}" alt="{{ $user->name }}" class="img-preview rounded-circle">
                         @else
-                            <img src="{{ secure_asset('img/' . $user->gender . ' icon.png') }}" alt="{{ $user->name }}"
+                            <img src="{{ secure_asset('img/' . $user->gender . '.png') }}" alt="{{ $user->name }}"
                                 class="img-preview rounded-circle">
                         @endif
                     </div>

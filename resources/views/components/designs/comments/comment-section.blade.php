@@ -3,10 +3,10 @@
     <div class="d-flex">
         <div class="align-items-start rounded-circle overflow-hidden" style="width: 50px; height: 50px;">
             @if ($comment->user->image)
-                <img src="{{ secure_asset('storage/' . $comment->user->image) }}" alt="{{ $comment->user->name }}"
+                <img src="{{ $comment->user->image }}" alt="{{ $comment->user->name }}"
                     style="width: 100%; height: 100%; object-fit: cover;">
             @else
-                <img src="{{ secure_asset('img/' . $comment->user->gender . ' icon.png') }}" alt="{{ $comment->user->name }}"
+                <img src="{{ secure_asset('img/' . $comment->user->gender . '.png') }}" alt="{{ $comment->user->name }}"
                     style="width: 100%; height: 100%; object-fit: cover;">
             @endif
         </div>
