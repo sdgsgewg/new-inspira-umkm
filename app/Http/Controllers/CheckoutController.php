@@ -113,7 +113,7 @@ class CheckoutController extends Controller
     
             $subtotalPrice = 0;
             foreach ($sellerGroup['items'] as $item) {
-                $subtotalPrice += $item->price;
+                $subtotalPrice += $item->price * $quantity;
             }
             $checkoutItemsPrice[] = $subtotalPrice;
             $totalPrice += $subtotalPrice;
@@ -124,7 +124,7 @@ class CheckoutController extends Controller
         $shippingMethods = ShippingMethod::all();
     
         // Store session data to keep track of where the request is coming from
-        session(['fromPage' => $request->has('design_id') ? 'DesignDetail' : 'DesignSelection']);
+        session(['fromPage' => 'DesignDetail']);
     
         // Return the checkout view with all the data
         return view('checkout.checkout', [

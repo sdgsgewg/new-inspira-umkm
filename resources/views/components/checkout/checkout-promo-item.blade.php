@@ -3,7 +3,7 @@
     <div class="col-4">
         <div class="img-wrapper col-md-4">
             @if ($promotion['image'])
-                <img src="{{ secure_asset('storage/' . $promotion['image']) }}" class="rounded-start" alt="...">
+                <img src="{{ $promotion['image'] }}" class="rounded-start" alt="...">
             @else
                 <img src="{{ secure_asset('img/Drink.jpg') }}" class="rounded-start" alt="...">
             @endif

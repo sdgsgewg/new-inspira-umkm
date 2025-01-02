@@ -17,7 +17,7 @@
             <div class="d-flex flex-row">
                 <div class="img-wrapper col-3 col-lg-2">
                     @if ($design->image)
-                        <img src="{{ secure_asset('storage/' . $design->image) }}" alt="...">
+                        <img src="{{ $design->image }}" alt="...">
                     @else
                         <img src="{{ secure_asset('img/' . $design->product->name) . '.jpg' }}" alt="...">
                     @endif

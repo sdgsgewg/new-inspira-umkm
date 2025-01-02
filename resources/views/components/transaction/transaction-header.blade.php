@@ -2,11 +2,11 @@
     <h1>@lang('order.title.' . $title)</h1>
 </div>
 <div class="position-relative">
-    <ul class="nav nav-order-status nav-underline nav-fill d-flex flex-nowrap justify-content-between" data-selected-status="{{ $selectedStatus }}">
+    <ul class="nav nav-order-status nav-underline nav-fill d-flex flex-nowrap justify-content-between"
+        data-selected-status="{{ $selectedStatus }}">
         @foreach ($allStatus as $s)
             <li class="nav-item nav-item-order position-relative">
-                <a class="nav-link nav-link-order" href="#"
-                    data-status="{{ $s }}">@lang('order.status.' . $s)</a>
+                <a class="nav-link nav-link-order" href="#" data-status="{{ $s }}">@lang('order.status.' . $s)</a>
                 <span class="badge bg-primary text-white rounded-circle">{{ $numTransactionByStatus[$s] ?? 0 }}</span>
             </li>
         @endforeach

@@ -21,7 +21,8 @@ class TransactionPaymentMiddleware
 
         // Ambil data user
         $user = Auth::user();
-        if ($transaction->buyer !== $user) {
+        
+        if ($transaction->buyer->id !== $user->id) {
             return redirect()->route('home');
         }
     

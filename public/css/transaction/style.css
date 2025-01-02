@@ -9,8 +9,8 @@
 }
 
 .nav-item-order {
-    width: 11rem;
-    min-width: 11rem;
+    width: 12rem;
+    min-width: 12rem;
     display: flex;
     align-items: center;
     flex-shrink: 0; /* Menghindari penyusutan */
