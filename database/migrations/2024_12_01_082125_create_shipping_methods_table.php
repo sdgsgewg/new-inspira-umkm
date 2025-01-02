@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shipping_methods', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Nama metode pengiriman (e.g., JNE, J&T, Grab)
+            $table->string('name');
             $table->string('description')->nullable();
             $table->integer('shipping_fee')->nullable();
             $table->timestamps();

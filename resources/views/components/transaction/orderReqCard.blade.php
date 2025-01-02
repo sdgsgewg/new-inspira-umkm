@@ -3,7 +3,7 @@
 
     <div class="col-12 mb-2 d-flex justify-content-between">
         <h6 class="fw-bold">
-            @lang('order.From') {{ $transaction->buyer->name }}
+            @lang('order.from') {{ $transaction->buyer->name }}
         </h6>
         <h6 class="text-success-emphasis">
             @lang('order.status.' . $transaction->transaction_status)
@@ -29,7 +29,7 @@
         @if (in_array($transaction->transaction_status, ['Not Paid', 'Returned', 'Completed', 'Cancelled']))
             <div class="col-12 mt-2 d-flex flex-row justify-content-end">
                 <a href="{{ route('transactions.show', ['transaction' => $transaction->order_number]) }}"
-                    class="btn btn-primary">@lang('order.View Detail')
+                    class="btn btn-primary">@lang('order.view_detail')
                 </a>
             </div>
         @elseif ($transaction->transaction_status === 'Delivered')
@@ -50,7 +50,7 @@
                 @endforeach
             @else
                 <a href="{{ route('transactions.show', ['transaction' => $transaction->order_number]) }}"
-                    class="btn btn-primary">@lang('order.View Detail')
+                    class="btn btn-primary">@lang('order.view_detail')
                 </a>
             @endif
         @else

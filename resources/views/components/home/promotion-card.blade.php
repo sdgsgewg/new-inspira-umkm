@@ -20,11 +20,11 @@
         <div class="d-flex flex-row m-0">
             {{-- Promo Price --}}
             <p class="fs-6 fs-lg-5">
-                {{ $promo->price }}
+                {{ 'Rp' . number_format($promo->price, '2', ',', '.') }}
             </p>
             {{-- Original Price --}}
             <p class="fs-6 fs-lg-5 text-decoration-line-through ms-4">
-                {{ $promo->original_price }}
+                {{ 'Rp' . number_format($promo->original_price, '2', ',', '.') }}
             </p>
         </div>
         {{-- Order Now Button --}}

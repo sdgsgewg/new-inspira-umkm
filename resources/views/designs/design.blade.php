@@ -8,7 +8,7 @@
     @include('components.modals.addToCartModal')
 
     <div class="row justify-content-center mt-4 mb-5">
-        <div class="col-11 col-md-8">
+        <div class="col-11 col-lg-10 col-xl-8">
             <h1 class="mt-2 mb-3">{{ $design['title'] }}</h1>
             <div class="mb-3">
                 <p>
@@ -21,7 +21,7 @@
             </div>
 
             <div class="d-flex flex-row" style="max-height: 350px;">
-                <div class="col-4 overflow-hidden">
+                <div class="col-5 col-md-4 overflow-hidden">
                     @if ($design->image)
                         <div style="max-height: 350px; overflow:hidden">
                             <img src="{{ $design->image }}" alt="{{ $design->name }}" class="img-fluid">
@@ -31,7 +31,7 @@
                             width="1200" height="400" class="img-fluid">
                     @endif
                 </div>
-                <div class="col-7 d-flex flex-column ms-5">
+                <div class="col-6 col-md-7 d-flex flex-column ms-5">
                     <p>@lang('designs.product')
                         <a href="{{ route('designs.product', ['product' => $design->product->slug]) }}"
                             class="text-decoration-none">
@@ -64,30 +64,28 @@
                             </span></p>
                     @endif
 
-                    <div class="d-flex flex-row gap-3 mt-auto">
+                    <div class="d-flex flex-column flex-md-row gap-3 mt-auto">
                         @if (auth()->check() && auth()->user()->id !== $design->seller->id)
                             {{-- Add to Cart --}}
-                            <form action="{{ route('carts.store', ['design' => $design->slug]) }}" method="POST"
-                                class="d-inline">
-                                @csrf
-                                <button type={{ $design->stock > 0 ? 'submit' : 'button' }}
-                                    class="btn {{ $design->stock > 0 ? 'btn-primary' : 'btn-secondary' }} d-inline-flex">
-                                    <i class="bi bi-cart-plus me-2"></i>@lang('designs.add_to_cart')
-                                </button>
-                            </form>
+                            <button class="btn {{ $design->stock > 0 ? 'btn-primary' : 'btn-secondary' }} d-inline-flex"
+                                data-bs-toggle="modal" data-bs-target="#quantityModal" data-action="add-to-cart"
+                                data-route="{{ route('carts.store') }}" data-submit="{{ __('quantity.add_to_cart') }}"
+                                {{ $design->stock == 0 ? 'disabled' : '' }}>
+                                <i class="bi bi-cart-plus me-2"></i>@lang('designs.add_to_cart')
+                            </button>
 
                             {{-- Checkout --}}
-                            <form action="{{ route('checkouts.checkoutFromDesign') }}" method="POST" class="d-inline">
-                                @csrf
+                            <button class="btn {{ $design->stock > 0 ? 'btn-success' : 'btn-secondary' }} d-inline-flex"
+                                data-bs-toggle="modal" data-bs-target="#quantityModal" data-action="checkout"
+                                data-route="{{ route('checkouts.checkoutFromDesign') }}"
+                                data-submit="{{ __('quantity.checkout') }}" {{ $design->stock == 0 ? 'disabled' : '' }}>
+                                <i class="bi bi-bag-check me-2"></i>@lang('designs.checkout')
+                            </button>
 
-                                <input type="hidden" name="design_id" value="{{ $design->id }}">
-
-                                <button type="submit"
-                                    class="btn {{ $design->stock > 0 ? 'btn-success' : 'btn-secondary' }} d-inline-flex"
-                                    {{ $design->stock == 0 ? 'disabled' : '' }}>
-                                    <i class="bi bi-bag-check me-2"></i>@lang('designs.checkout')
-                                </button>
-                            </form>
+                            {{-- Input Quantity Modal --}}
+                            @include('components.modals.input-quantity-modal', [
+                                'design' => $design,
+                            ])
                         @endif
                     </div>
                 </div>

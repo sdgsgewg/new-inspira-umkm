@@ -31,15 +31,15 @@
                         <div class="text-uppercase">
                             @if ($subs->status === 'pending')
                                 <span class="badge bg-warning text-black px-3 py-2">
-                                    {{ $subs->status }}
+                                    {{ __('subscriptions.status.' . $subs->status) }}
                                 </span>
                             @elseif (in_array($subs->status, ['inactive', 'canceled', 'expired']))
                                 <span class="badge bg-danger px-3 py-2">
-                                    {{ $subs->status }}
+                                    {{ __('subscriptions.status.' . $subs->status) }}
                                 </span>
                             @elseif ($subs->status === 'active')
                                 <span class="badge bg-success px-3 py-2">
-                                    {{ $subs->status }}
+                                    {{ __('subscriptions.status.' . $subs->status) }}
                                 </span>
                             @endif
                         </div>

@@ -19,10 +19,10 @@ return [
     'noOrderReq' => "You still don't have any order request yet",
 
     // Order and Order Request Card
-    'From' => 'From',
+    'from' => 'From',
     'products' => 'products',
     'product' => 'product',
-    'View Detail' => 'View Detail',
+    'view_detail' => 'View Detail',
     'statusLabels' => [
         'Awaiting Payment' => 'Awaiting Payment',
         'Pay Now' => 'Pay Now',
@@ -39,26 +39,45 @@ return [
 
     // Order Detail Page
     // Bagian Atas
-    'Back' => 'Back',
-    'Delivery Address' => 'Delivery Address',
-    'Order' => 'Order',
+    'back' => 'Back',
+    'delivery_address' => 'Delivery Address',
+    'order' => 'Order',
+
+    // Bagian Pembayaran
+    'payment' => 'Payment',
+    'payment_method' => 'Payment Method',
+    'payment_status' => 'Payment Status',
+    'payment_statuses' => [
+        'Pending' => 'Pending',
+        'Paid' => 'Paid',
+        'Failed' => 'Failed'
+    ],
+
+    // Bagian Pengiriman
+    'shipping' => 'Shipping',
+    'shipping_method' => 'Shipping Method',
+    'shipping_status' => 'Shipping Status',
+    'shipping_statuses' => [
+        'Awaiting Pickup' => 'Awaiting Pickup',
+        'In Transit' => 'In Transit',
+        'Delivered' => 'Deilvered'
+    ],
 
     // Order Detail Card
-    'Send Feedback' => 'Send Feedback',
+    'send_feedback' => 'Send Feedback',
     'notes' => 'Notes for Seller',
-    'Subtotal for Product' => 'Subtotal for Product',
-    'Shipping Fee' => 'Shipping Fee',
-    'Service Fee' => 'Service Fee',
-    'Total Order' => 'Total Order',
+    'subtotal_for_product' => 'Subtotal for Product',
+    'shipping_fee' => 'Shipping Fee',
+    'service_fee' => 'Service Fee',
+    'total_order' => 'Total Order',
 
     // Bagian Bawah
-    'Order Number' => 'Order Number',
-    'Payment Method' => 'Payment Method',
-    'Order Time' => 'Order Time',
-    'Payment Time' => 'Payment Time',
-    'Shipping Time' => 'Shipping Time',
-    'Received Time' => 'Received Time',
-    'Completion Time' => 'Completion Time',
+    'order_number' => 'Order Number',
+    'order_time' => 'Order Time',
+    'payment_time' => 'Payment Time',
+    'shipping_time' => 'Shipping Time',
+    'received_time' => 'Received Time',
+    'completion_time' => 'Completion Time',
 
     // Order Status Message
     'payment_cancelled' => 'Please pay your order immediately',

@@ -87,8 +87,8 @@ class CheckoutController extends Controller
         // Initialize checkoutItems as an empty array.
         $checkoutItems = [];
     
-        $design = Design::findOrFail($request->input('design_id'));
-        $quantity = 1; // Assume quantity is 1 for a single design checkout.
+        $design = Design::findOrFail($request['designId']);
+        $quantity = intval($request['quantity']);
 
         // Get seller details
         $sellerId = $design->seller->id;

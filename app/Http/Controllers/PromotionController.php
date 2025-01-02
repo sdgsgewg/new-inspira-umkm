@@ -44,7 +44,7 @@ class PromotionController extends Controller
         $products = $promotion->products;
 
         return view('promotions.designs', [
-            'title' => 'Promotion Designs',
+            'title' => 'Design Selection',
             'promo' => $promotion,
             'products' => $products,
         ]);

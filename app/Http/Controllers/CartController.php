@@ -49,8 +49,11 @@ class CartController extends Controller
     }
 
     // Menambah design ke dalam cart
-    public function store(Request $request, Design $design)
+    public function store(Request $request)
     {
+        $design = Design::where('id', $request['designId'])->first();
+        $quantity = intval($request->quantity);
+
         // Check if the design is retrieved correctly
         if (!$design) {
             return redirect()->back()->with('error', 'Design not found.');
@@ -59,17 +62,19 @@ class CartController extends Controller
         $user = Auth::user();
         
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
-        
+
         $cartDesign = $cart->designs()->where('design_id', $design->id)->first();
 
+        // Jika sudah ada cart untuk design terkait
         if ($cartDesign) {
             $cart->designs()->updateExistingPivot($design->id, [
                 'quantity' => $cartDesign->pivot->quantity + 1,
                 'isChecked' => true
             ]);
         } else {
+            // Jika belum ada cart untuk design terkait
             $cart->designs()->attach($design->id, [
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'isChecked' => true
             ]);
         }

@@ -1,18 +1,35 @@
+.nav-order-status {
+    overflow-x: auto; /* Izinkan scroll horizontal */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling untuk perangkat touch */
+    scrollbar-width: none; /* Hilangkan scrollbar (Firefox) */
+}
+
+.nav-order-status::-webkit-scrollbar {
+    display: none; /* Hilangkan scrollbar (Chrome, Safari) */
+}
+
 .nav-item-order {
+    width: 11rem;
+    min-width: 11rem;
     display: flex;
     align-items: center;
+    flex-shrink: 0; /* Menghindari penyusutan */
 }
 
 .nav-link-order {
-    flex-grow: 1;
     text-align: center;
+    flex-grow: 0; /* Jangan biarkan elemen ini meluas */
+    width: 100%; /* Mengisi ruang yang tersedia */
 }
 
+/* Kalau mau indikator jumlah pesanan hanya muncul saat di-hover, uncomment line yang di-comment di bawah ini */
 .badge {
     position: absolute;
-    right: 10%;
-    visibility: hidden;
-    opacity: 0;
+    right: 0;
+    visibility: visible;
+    /* visibility: hidden; */
+    opacity: 1;
+    /* opacity: 0; */
     min-width: 24px;
     min-height: 24px;
     display: flex;
@@ -20,13 +37,13 @@
     align-items: center;
     font-size: 0.9rem;
     margin-left: auto;
-    transition: visibility 0s, opacity 0.2s ease-in-out;
+    /* transition: visibility 0s, opacity 0.2s ease-in-out; */
 }
 
-.nav-item-order:hover .badge {
+/* .nav-item-order:hover .badge {
     visibility: visible;
     opacity: 1;
-}
+} */
 
 .transaction-card .card {
     width: 100%;

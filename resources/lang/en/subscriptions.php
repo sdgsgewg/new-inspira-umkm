@@ -8,12 +8,27 @@ return [
     'payment_date' => 'Payment date:',
     'transaction_date' => 'Transaction date:',
     'pay_now' => 'Pay',
+    'status' => [
+        'pending' => 'Pending',
+        'active' => 'Active',
+        'inactive'=> 'Inactive',
+        'canceled' => 'Cancelled',
+        'expired' => 'Expired'
+    ],
 
     // Pricing Page
     'pricing' => 'Pricing',
     'subs_desc' => 'Find the pricing plans that suit your needs. We offer a variety of options with flexible features, designed to provide the best solutions for our customers. Choose the right plan to start your journey with us.',
     'features' => 'Features:',
     'get_started' => 'Get Started',
+
+    // Design Selection Page
+    'title' => [
+        'Design Selection' => 'Design Selection'
+    ],
+    'please_select_design' => 'Please select the design that you want',
+    'select_design' => 'Select a design',
+    'checkout' => 'Checkout',
 
     // Checkout page
     'subs_confirmation' => 'Subscription Confirmation',

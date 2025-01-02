@@ -6,14 +6,14 @@
     {{-- Promotion Content --}}
     @foreach ($transaction->promotions as $promo)
         <div class="col-12 mb-3 d-flex flex-row">
-            <div class="img-wrapper col-2 col-lg-2">
+            <div class="img-wrapper col-3 col-lg-2">
                 @if ($promo->image)
                     <img src="{{ secure_asset('storage/' . $promo->image) }}" alt="...">
                 @else
                     <img src="{{ secure_asset('img/Drink.jpg') }}" alt="...">
                 @endif
             </div>
-            <div class="card-info col-10 col-lg-10 ps-4 d-flex flex-column justify-content-between">
+            <div class="card-info col-9 col-lg-10 ps-4 d-flex flex-column justify-content-between">
                 <div>
                     <h5>{{ $promo->title }}</h5>
                     <p class="text-end">x{{ $promo->pivot->quantity }}</p>
@@ -34,14 +34,14 @@
     {{-- Designs Content --}}
     @foreach ($transaction->designs as $design)
         <div class="col-12 mb-3 d-flex flex-row">
-            <div class="img-wrapper col-2 col-lg-2">
+            <div class="img-wrapper col-3 col-lg-2">
                 @if ($design->image)
                     <img src="{{ secure_asset('storage/' . $design->image) }}" alt="...">
                 @else
                     <img src="{{ secure_asset('img/' . $design->product->name) . '.jpg' }}" alt="...">
                 @endif
             </div>
-            <div class="card-info col-10 col-lg-10 ps-4 d-flex flex-column justify-content-between">
+            <div class="card-info col-9 col-lg-10 ps-4 d-flex flex-column justify-content-between">
                 <div>
                     <h5>{{ $design->title }}</h5>
                     <p class="text-end">x{{ $design->pivot->quantity }}</p>

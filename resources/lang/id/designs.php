@@ -44,7 +44,7 @@ return [
     'category' => 'Kategori:',
     'rating' => 'Penilaian:',
     'add_to_cart' => 'Keranjang',
-    'checkout' => 'Pembayaran',
+    'checkout' => 'Checkout',
     'detailed_information' => 'Informasi Detail',
     'price' => 'Harga:',
     'stock' => 'Stok:',

@@ -19,7 +19,7 @@
 </style>
 
 <nav class="position-relative navbar navbar-expand-lg bg-dark sticky-top border-bottom" data-bs-theme="dark">
-    <div class="col-12 d-flex justify-content-between px-5 py-2">
+    <div class="col-12 d-flex justify-content-between px-4 px-lg-5 py-2">
         {{-- Logo Inspira UMKM --}}
         @include('partials.logo')
 

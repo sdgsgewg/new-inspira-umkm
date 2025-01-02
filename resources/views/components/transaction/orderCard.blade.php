@@ -8,15 +8,15 @@
         </h6>
         {{-- Transaction Status --}}
         @if (in_array($transaction->transaction_status, ['Not Paid', 'Returned', 'Cancelled']))
-            <div class="bg-danger rounded-4 fs-6 fw-bold px-3">
+            <div class="bg-danger rounded-4 fs-6 fw-bold px-2 px-lg-3">
                 @lang('order.status.' . $transaction->transaction_status)
             </div>
         @elseif (in_array($transaction->transaction_status, ['Pending', 'Accepted', 'Delivered']))
-            <div class="bg-warning rounded-4 text-dark fs-6 fw-bold px-3">
+            <div class="bg-warning rounded-4 text-dark fs-6 fw-bold px-2 px-lg-3">
                 @lang('order.status.' . $transaction->transaction_status)
             </div>
         @else
-            <div class="bg-success rounded-4 fs-6 fw-bold px-3">
+            <div class="bg-success rounded-4 fs-6 fw-bold px-2 px-lg-3">
                 @lang('order.status.' . $transaction->transaction_status)
             </div>
         @endif
@@ -42,7 +42,7 @@
         @if (in_array($transaction->transaction_status, ['Pending', 'Accepted', 'Returned', 'Completed', 'Cancelled']))
             <div class="col-12 mt-2 d-flex flex-row justify-content-end">
                 <a href="{{ route('transactions.show', ['transaction' => $transaction]) }}"
-                    class="btn btn-primary">@lang('order.View Detail')
+                    class="btn btn-primary">@lang('order.view_detail')
                 </a>
             </div>
             {{-- Not Paid --}}
@@ -87,7 +87,7 @@
                 @endforeach
             @else
                 <a href="{{ route('transactions.show', ['transaction' => $transaction->order_number]) }}"
-                    class="btn btn-primary">@lang('order.View Detail')
+                    class="btn btn-primary">@lang('order.view_detail')
                 </a>
             @endif
         @else

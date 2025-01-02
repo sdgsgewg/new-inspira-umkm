@@ -152,9 +152,6 @@ Route::middleware(['auth', 'IsBuyer'])->prefix('carts')->as('carts.')->group(fun
     // Resource for cart
     Route::resource('/', CartController::class)->parameters(['' => 'cart'])->except(['create', 'edit']);
 
-    // Store design to cart
-    Route::post('store/{design:slug}', [CartController::class, 'store'])->name('store');
-
     // Update cart item checkbox
     Route::post('update-is-checked', [CartController::class, 'updateIsChecked'])->name('updateIsChecked');
 
