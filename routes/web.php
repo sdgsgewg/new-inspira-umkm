@@ -186,7 +186,6 @@ Route::middleware('auth')->prefix('transactions')->as('transactions.')->group(fu
 
     // Route for update transaction status
     Route::post('/updateStatus/{transaction:order_number}', [TransactionController::class, 'updateStatus'])
-    ->middleware('CheckRole:buyer')
     ->name('updateStatus');
 
     // Payment Summary Page

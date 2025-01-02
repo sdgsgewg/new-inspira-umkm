@@ -320,7 +320,7 @@ class TransactionController extends Controller
         //
     }
 
-    public function updateStatus(Request $request,Transaction $transaction)
+    public function updateStatus(Request $request, Transaction $transaction)
     {
         $newStatus = $request->choice;
 
