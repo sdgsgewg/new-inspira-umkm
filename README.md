@@ -4,3 +4,16 @@ With professional and accessible design services, we aim to support the growth o
 
 Please kindly visit our website at:
 https://new-inspira-umkm.vercel.app/
+
+Here are our presentation regarding InspiraUMKM:
+https://www.canva.com/design/DAGYVSKmBiY/aWyyi9_YaxylkrKdvsp4-g/edit
+
+Below is the list of technologie that we used to develop InspiraUMKM:
+UI/UX Design: Figma
+Database: MySQL (Aiven)
+Programming Language:
+PHP (Laravel), JavaScript
+Styling:
+CSS, Bootstrap
+Version Control System (VCS): Github
+Cloud Storage: Cloudinary
