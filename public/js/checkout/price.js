@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update nilai input shippingFee dan totalPrice
         shippingFeeInput.value = shippingFee;
         console.log(shippingFeeInput.value);
-        grandTotalPriceInput.value = totalPrice;
+        grandTotalPriceInput.value = grandTotalPrice;
         console.log(grandTotalPriceInput.value);
     };
 
