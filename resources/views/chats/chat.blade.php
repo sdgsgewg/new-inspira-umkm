@@ -16,7 +16,7 @@
                         </a>
                     </div>
                     <div class="col-1 overflow-hidden" style="width: 50px; height:50px;">
-                        <img src="{{ $recipient->image ? secure_asset('storage/' . $recipient->image) : secure_asset('img/' . $recipient->gender . ' icon.png') }}"
+                        <img src="{{ $recipient->image ? $recipient->image : secure_asset('img/' . $recipient->gender . '.png') }}"
                             alt="{{ $recipient->name }}" class="rounded-circle">
                     </div>
                     <div class="col-10 ps-3">

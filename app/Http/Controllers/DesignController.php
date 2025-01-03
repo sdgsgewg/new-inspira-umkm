@@ -299,12 +299,12 @@ class DesignController extends Controller
         ->selectRaw('IFNULL(AVG(dr.rating), 0) as avg_rating')
         ->groupBy('designs.id')
         ->orderByDesc('avg_rating')
-        ->paginate(12);
+        ->paginate(8);
 
         $avgSellerRating = $seller->designs()
-            ->leftJoin('design_reviews as dr', 'designs.id', '=', 'dr.design_id')
-            ->selectRaw('IFNULL(AVG(dr.rating), 0) as avg_rating')
-            ->value('avg_rating');
+        ->leftJoin('design_reviews as dr', 'designs.id', '=', 'dr.design_id')
+        ->selectRaw('IFNULL(AVG(dr.rating), 0) as avg_rating')
+        ->value('avg_rating');
     
         // Format the rating to two decimal places
         $avgSellerRating = number_format($avgSellerRating, 2) ?: '0.00';
