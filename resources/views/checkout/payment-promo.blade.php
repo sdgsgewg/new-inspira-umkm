@@ -46,7 +46,7 @@
                                     </h6>
 
                                     {{-- Subtotal Price --}}
-                                    <h6 class="text-info fw-bold">
+                                    <h6 class="text-success-emphasis fw-bold">
                                         {{ 'Rp' . number_format($subTotalPrice, 0, ',', '.') }}
                                     </h6>
                                 </div>
@@ -56,12 +56,8 @@
                             <div class="col-12 col-lg-6 d-flex flex-column ps-lg-5 mt-4 mt-lg-0 gap-3">
                                 <h2 class="mb-1 mb-lg-3">@lang('checkout.order_detail')</h2>
 
-                                {{-- Option dari setiap design --}}
-                                @foreach ($optionValueResults as $result)
-                                    <p class="m-0">
-                                        {{ $result->product_name . ' ' . $result->option_name . ' (' . $result->design_title . '): ' . $result->option_value }}
-                                    </p>
-                                @endforeach
+                                {{-- Option Value dari setiap Design --}}
+                                @include('components.checkout.option-value-results')
 
                                 {{-- Notes for seller --}}
                                 <p class="m-0">

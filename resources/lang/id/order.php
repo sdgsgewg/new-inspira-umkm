@@ -10,7 +10,7 @@ return [
         'Not Paid' => 'Belum Dibayar',
         'Pending' => 'Tertunda',
         'Accepted' => 'Diterima',
-        'Delivered' => 'Terkirim',
+        'Delivered' => 'Dikirim',
         'Returned' => 'Dikembalikan',
         'Completed' => 'Selesai',
         'Cancelled' => 'Dibatalkan',

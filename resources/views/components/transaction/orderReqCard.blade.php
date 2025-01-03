@@ -2,12 +2,24 @@
     onclick="window.location.href='{{ route('transactions.show', ['transaction' => $transaction->order_number]) }}'">
 
     <div class="col-12 mb-2 d-flex justify-content-between">
+        {{-- Buyer Name --}}
         <h6 class="fw-bold">
             @lang('order.from') {{ $transaction->buyer->name }}
         </h6>
-        <h6 class="text-success-emphasis">
-            @lang('order.status.' . $transaction->transaction_status)
-        </h6>
+        {{-- Transaction Status --}}
+        @if (in_array($transaction->transaction_status, ['Not Paid', 'Returned', 'Cancelled']))
+            <h6 class="text-danger">
+                @lang('order.status.' . $transaction->transaction_status)
+            </h6>
+        @elseif (in_array($transaction->transaction_status, ['Pending', 'Accepted', 'Delivered']))
+            <h6 class="text-warning">
+                @lang('order.status.' . $transaction->transaction_status)
+            </h6>
+        @else
+            <h6 class="text-success-emphasis">
+                @lang('order.status.' . $transaction->transaction_status)
+            </h6>
+        @endif
     </div>
 
     @include('components.transaction.cardContent')

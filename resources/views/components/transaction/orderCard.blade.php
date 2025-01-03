@@ -8,17 +8,17 @@
         </h6>
         {{-- Transaction Status --}}
         @if (in_array($transaction->transaction_status, ['Not Paid', 'Returned', 'Cancelled']))
-            <div class="bg-danger rounded-4 fs-6 fw-bold px-2 px-lg-3">
+            <h6 class="text-danger">
                 @lang('order.status.' . $transaction->transaction_status)
-            </div>
+            </h6>
         @elseif (in_array($transaction->transaction_status, ['Pending', 'Accepted', 'Delivered']))
-            <div class="bg-warning rounded-4 text-dark fs-6 fw-bold px-2 px-lg-3">
+            <h6 class="text-warning">
                 @lang('order.status.' . $transaction->transaction_status)
-            </div>
+            </h6>
         @else
-            <div class="bg-success rounded-4 fs-6 fw-bold px-2 px-lg-3">
+            <h6 class="text-success-emphasis">
                 @lang('order.status.' . $transaction->transaction_status)
-            </div>
+            </h6>
         @endif
     </div>
 

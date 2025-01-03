@@ -16,7 +16,7 @@
         <div class="col-11">
             <div class="card d-flex flex-column overflow-hidden">
                 @if (in_array($transaction->transaction_status, ['Not Paid', 'Returned', 'Cancelled']))
-                    <div class="card-header fw-bold bg-danger">
+                    <div class="card-header fw-bold bg-danger text-white">
                         {{ __('order.order') . ' ' . __('order.status.' . $transaction->transaction_status) }}
                     </div>
                 @elseif (in_array($transaction->transaction_status, ['Pending', 'Accepted', 'Delivered']))
@@ -24,7 +24,7 @@
                         {{ __('order.order') . ' ' . __('order.status.' . $transaction->transaction_status) }}
                     </div>
                 @else
-                    <div class="card-header fw-bold bg-success">
+                    <div class="card-header fw-bold bg-success text-white">
                         {{ __('order.order') . ' ' . __('order.status.' . $transaction->transaction_status) }}
                     </div>
                 @endif

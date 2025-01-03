@@ -31,7 +31,7 @@
     {{-- Total Payment --}}
     <div class="d-flex flex-row justify-content-between">
         <h5 class="fw-bold">@lang('checkout.total_payment')</h5>
-        <h5 class="text-info fw-bold" id="grandTotalPriceDisplay">
+        <h5 class="text-success-emphasis fw-bold" id="grandTotalPriceDisplay">
             {{ 'Rp' . number_format($grandTotalPrice, 0, ',', '.') }}
         </h5>
     </div>

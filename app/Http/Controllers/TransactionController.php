@@ -13,6 +13,7 @@ use App\Models\TransactionDesign;
 use App\Models\TransactionPromotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 
 class TransactionController extends Controller
@@ -322,7 +323,7 @@ class TransactionController extends Controller
 
         $params = array(
             'transaction_details' => array(
-                'order_id' => rand(),
+                'order_id' => $transaction['order_number'],
                 'gross_amount' => $transaction['grand_total_price'],
             ),
             'customer_details' => array(
@@ -343,9 +344,52 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
+        // Fetch Seller
+        $seller = $transaction->seller;
+
+        // ID pengguna yang sedang login
+        $userId = Auth::id();
+
+        // Fetch Option Values for Each Design
+        $designs = DB::table('transaction_designs as td')
+        ->join('design_options as do', 'td.design_id', '=', 'do.design_id')
+        ->join('designs as d', 'td.design_id', '=', 'd.id')
+        ->join('products as p', 'd.product_id', '=', 'p.id')
+        ->leftJoin('design_reviews as dr', function ($join) use ($userId) {
+            $join->on('d.id', '=', 'dr.design_id')
+                 ->where('dr.user_id', '=', $userId);
+        })
+        ->join('option_values as ov', 'do.option_value_id', '=', 'ov.id')
+        ->join('options as o', 'ov.option_id', '=', 'o.id')
+        ->where('td.transaction_id', $transaction->id)
+        ->groupBy('d.id', 'd.image', 'd.title', 'p.name', 'td.quantity', 'd.price', 'dr.isRated', 'o.name', 'ov.value') // Tambahkan kolom non-agregat ke GROUP BY
+        ->select(
+            'd.id as id',
+            // Design Image
+            'd.image as image',
+            // Design Name
+            'd.title as title',
+            // Product Name
+            'p.name as product_name',
+            // Design Quantity
+            'td.quantity as quantity',
+            // Design Price
+            'd.price as price',
+            // Is Rated
+            'dr.isRated as user_rating',
+            // Option Name
+            'o.name as option_name',
+            // Option Value
+            'ov.value as option_value'
+        )
+        ->get();
+
         return view('transaction.detail', [
             'title' => 'Transaction Detail',
             'transaction' => $transaction,
+            'seller' => $seller,
+            'designs' => $designs,
+            'isSeller' => $userId === $transaction->seller->id,
         ]);
     }
 

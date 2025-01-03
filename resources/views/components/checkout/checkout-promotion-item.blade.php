@@ -14,7 +14,7 @@
             {{-- Promotion Price --}}
             <div class="d-flex flex-row m-0">
                 {{-- Promo Price --}}
-                <h6 class="text-info fw-bold m-0">
+                <h6 class="text-success-emphasis fw-bold m-0">
                     {{ 'Rp' . number_format($promotion['price'], 0, ',', '.') }}
                 </h6>
                 {{-- Original Price --}}

@@ -19,7 +19,7 @@
                             @if ($design->image)
                                 <img src="{{ $design->image }}" alt="...">
                             @else
-                                <img src="{{ secure_asset('img/' . $design->product->name) . '.jpg' }}" alt="...">
+                                <img src="{{ secure_asset('img/' . $design->product_name) . '.jpg' }}" alt="...">
                             @endif
                         </div>
                         <div class="card-info col-10 col-lg-10 ps-3">
