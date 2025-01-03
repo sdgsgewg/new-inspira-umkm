@@ -28,7 +28,7 @@
             </p>
         </div>
         {{-- Order Now Button --}}
-        <a href="{{ $promo->is_subscribed ? route('promotions.designs', ['promotion' => $promo->id]) : route('subscriptions.pricing') }}"
+        <a href="{{ $promo->is_subscribed ? route('promotions.designs', ['promotion' => $promo->slug]) : route('subscriptions.pricing') }}"
             class="btn btn-success rounded-3 px-3 px-lg-4 py-1 py-lg-2 text-uppercase">
             Order Now!
         </a>

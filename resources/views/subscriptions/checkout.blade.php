@@ -3,6 +3,9 @@
 @section('container')
     <div class="row justify-content-center mt-5">
         <div class="col-11 d-flex flex-column">
+            <h1>{{ $title }}</h1>
+            <hr class="mb-4">
+
             <form method="POST" action="{{ route('subscriptions.store') }}" id="checkout-form">
                 @csrf
 
@@ -30,7 +33,7 @@
 
                     {{-- Proceed to Payment --}}
                     <button type="submit" class="btn btn-success text-transform-uppercase">
-                        {{ __('subscriptions.button.pay_now') }}
+                        {{ __('subscriptions.button.subscribe') }}
                     </button>
                 </div>
 

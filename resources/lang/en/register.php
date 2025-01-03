@@ -17,4 +17,5 @@ return [
     'register' => 'Register',
     'have_account' => 'Already have an account?',
     'login' => 'Login here!',
+    'registration_success' => 'Registration successful! Please Login!'
 ];

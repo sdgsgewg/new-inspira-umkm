@@ -22,6 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'CheckRole' => \App\Http\Middleware\CheckRole::class,
             'CheckSubscriptionPayment' => \App\Http\Middleware\SubscriptionPaymentMiddleware::class,
             'CheckTransactionPayment' => \App\Http\Middleware\TransactionPaymentMiddleware::class,
+            'CheckPaymentPage' => \App\Http\Middleware\PaymentPageMiddleware::class,
+            'CheckPaymentSnap' => \App\Http\Middleware\PaymentSnapPageMiddleware::class,
+            'CheckPaymentSuccess' => \App\Http\Middleware\PaymentSuccessPageMiddleware::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

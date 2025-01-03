@@ -35,7 +35,8 @@ return [
 
     'button' => [
         'cancel' => 'Batal',
-        'pay_now' => 'Bayar Sekarang',
+        'subscribe' => 'Langganan',
+        'pay_now' => 'Bayar Sekarang'
     ],
 
     // Halaman Snap Pembayaran
@@ -56,6 +57,6 @@ return [
     'start_date' => 'Tanggal Mulai',
     'end_date' => 'Tanggal Berakhir',
     'to_home_page' => 'Kembali ke Halaman Utama',
-    'subs_created' => 'Langganan Anda telah aktif! Nikmati manfaat dari paket Anda.',
+    'subs_created' => 'Paket Anda telah aktif! Nikmati manfaat dari paket Anda.',
     'to_my_subs' => 'Lihat Paket Saya'
 ];

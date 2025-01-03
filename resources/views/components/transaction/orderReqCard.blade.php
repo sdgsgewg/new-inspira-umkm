@@ -26,12 +26,14 @@
 
     <div class="col-12 mt-2 d-flex flex-row justify-content-end gap-3">
 
+        {{-- View detail Onluy --}}
         @if (in_array($transaction->transaction_status, ['Not Paid', 'Returned', 'Completed', 'Cancelled']))
             <div class="col-12 mt-2 d-flex flex-row justify-content-end">
                 <a href="{{ route('transactions.show', ['transaction' => $transaction->order_number]) }}"
                     class="btn btn-primary">@lang('order.view_detail')
                 </a>
             </div>
+            {{-- Delivered --}}
         @elseif ($transaction->transaction_status === 'Delivered')
             @if ($transaction->isReceived)
                 @foreach ($transaction->nextStatuses as $status)

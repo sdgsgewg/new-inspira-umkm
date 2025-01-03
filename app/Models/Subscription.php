@@ -25,4 +25,9 @@ class Subscription extends Model
     {
         return $this->hasOne(SubscriptionPayment::class);
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'subscription_number';
+    }
 }

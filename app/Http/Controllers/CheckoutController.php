@@ -52,17 +52,17 @@ class CheckoutController extends Controller
         }
 
         $checkoutItemsPrice = [];
-        $totalPrice = 0;
+        $subTotalPrice = 0;
         foreach ($checkoutItems as $sellerId => $sellerGroup) {
             $subtotalPrice = 0;
             foreach($sellerGroup['items'] as $item) {
                 $subtotalPrice += ($item->price * $item->pivot->quantity);
             }
             $checkoutItemsPrice[] = $subtotalPrice;
-            $totalPrice += $subtotalPrice;
+            $subTotalPrice += $subtotalPrice;
         }
 
-        $paymentMethods = PaymentMethod::all();
+        // $paymentMethods = PaymentMethod::all();
         $shippingMethods = ShippingMethod::all();
 
         session(['fromPage' => 'Cart']);
@@ -70,18 +70,16 @@ class CheckoutController extends Controller
         return view('checkout.checkout', [
             'title' => 'Checkout',
             'buyer' => Auth::user(),
-            // 'cart' => $cart,
             'checkoutItems' => $checkoutItems,
             'productAmount' => $productAmount,
             'checkoutItemsPrice' => $checkoutItemsPrice,
-            'subTotalPrice' => $totalPrice,
-            'promotionPrice' => 0, // Only have value when the checkout done from promotion
-            'paymentMethods' => $paymentMethods,
             'shippingMethods' => $shippingMethods,
+            'subTotalPrice' => $subTotalPrice,
+            'serviceFee' => 1000,
         ]);
     }
 
-    // Checkout from Design Detail and Design Selection Page
+    // Checkout from Design Detail Page
     public function checkoutFromDesign(Request $request)
     {
         // Initialize checkoutItems as an empty array.
@@ -105,22 +103,23 @@ class CheckoutController extends Controller
         // Calculate product amounts and prices for each seller.
         $productAmount = [];
         $checkoutItemsPrice = [];
-        $totalPrice = 0;
+        $subTotalPrice = 0;
     
         foreach ($checkoutItems as $sellerId => $sellerGroup) {
-            $amount = count($sellerGroup['items']);
-            $productAmount[] = $amount;
-    
+            $amount = 0;
             $subtotalPrice = 0;
+
             foreach ($sellerGroup['items'] as $item) {
+                $amount += $quantity;
                 $subtotalPrice += $item->price * $quantity;
             }
+            
+            $productAmount[] = $amount;
             $checkoutItemsPrice[] = $subtotalPrice;
-            $totalPrice += $subtotalPrice;
+            $subTotalPrice += $subtotalPrice;
         }
     
-        // Fetch payment and shipping methods
-        $paymentMethods = PaymentMethod::all();
+        // Fetch shipping methods
         $shippingMethods = ShippingMethod::all();
     
         // Store session data to keep track of where the request is coming from
@@ -131,15 +130,16 @@ class CheckoutController extends Controller
             'title' => 'Checkout',
             'buyer' => Auth::user(),
             'checkoutItems' => $checkoutItems,
-            'quantity' => $quantity,
             'productAmount' => $productAmount,
+            'quantity' => $quantity,
             'checkoutItemsPrice' => $checkoutItemsPrice,
-            'subTotalPrice' => $totalPrice,
-            'paymentMethods' => $paymentMethods,
             'shippingMethods' => $shippingMethods,
+            'subTotalPrice' => $subTotalPrice,
+            'serviceFee' => 1000,
         ]);
     }
 
+    // Checkout from Design Selection Page
     public function checkoutFromPromotion(Request $request)
     {
         // Initialize checkoutItems as an empty array.
@@ -182,22 +182,24 @@ class CheckoutController extends Controller
         // Calculate product amounts and prices for each seller.
         $productAmount = [];
         $checkoutItemsPrice = [];
-        $totalPrice = 0;
+        $subTotalPrice = 0;
+        $quantity = 1;
     
         foreach ($checkoutItems as $sellerId => $sellerGroup) {
-            $amount = count($sellerGroup['items']);
-            $productAmount[] = $amount;
-    
+            $amount = 0;
             $subtotalPrice = 0;
+    
             foreach ($sellerGroup['items'] as $item) {
-                $subtotalPrice += $item->price;
+                $amount += $quantity;
+                $subtotalPrice += $item->price * $quantity;
             }
+
+            $productAmount[] = $amount;
             $checkoutItemsPrice[] = $subtotalPrice;
-            $totalPrice += $subtotalPrice;
+            $subTotalPrice += $subtotalPrice;
         }
     
-        // Fetch payment and shipping methods
-        $paymentMethods = PaymentMethod::all();
+        // Fetch shipping methods
         $shippingMethods = ShippingMethod::all();
     
         // Store session data to keep track of where the request is coming from
@@ -208,15 +210,15 @@ class CheckoutController extends Controller
             'title' => 'Checkout',
             'buyer' => Auth::user(),
             'checkoutItems' => $checkoutItems,
-            'quantity' => 1, // Or adjust if necessary
             'productAmount' => $productAmount,
+            'quantity' => $quantity,
             'checkoutItemsPrice' => $checkoutItemsPrice,
-            'subTotalPrice' => $totalPrice,
             'promotion' => $promotion,
             'promotionPrice' => $promotionPrice,
             'originalPrice' => $originalPrice,
-            'paymentMethods' => $paymentMethods,
             'shippingMethods' => $shippingMethods,
+            'subTotalPrice' => $subTotalPrice,
+            'serviceFee' => 1000,
         ]);
     }
 

@@ -3,7 +3,8 @@
 return [
     // Checkout Page
     'title' => [
-        'Checkout' => 'Pembayaran',
+        'Checkout' => 'Checkout',
+        'Payment' => 'Pembayaran'
     ],
     'delivery_address' => 'Alamat Pengiriman',
     'ordered_amount' => 'Jumlah Pesanan',
@@ -20,8 +21,8 @@ return [
     'select_shipping_method' => 'Pilih metode pengiriman',
 
     'button' => [
+        'checkout' => 'Checkout',
         'proceed_to_payment' => 'Lanjutkan ke Pembayaran',
-        'create_order' => 'Buat Pesanan',
         'cancel' => 'Batal',
         'pay_now' => 'Bayar Sekarang',
     ],
@@ -29,13 +30,14 @@ return [
     // Payment Page
     'order_detail' => 'Detail Pesanan',
     'order_summary' => 'Ringkasan Pesanan',
-    'subtotal' => 'Subtotal untuk Produk',
     'shipping_fee' => 'Biaya Pengiriman',
     'service_fee' => 'Biaya Layanan',
     'total_payment' => 'Total Pembayaran',
-
+    
     // Payment Snap Page
     'checkout_details' => 'Detail Pembayaran',
+    'subtotal_for_design' => 'Subtotal untuk Desain',
+    'subtotal_for_promo' => 'Subtotal untuk Paket Promo',
 
     // Loading
     'loading' => 'Memuat...',
@@ -47,7 +49,7 @@ return [
     'to' => 'Ke',
     'payment_method_success' => 'Metode Pembayaran',
     'transaction_number' => 'Nomor Transaksi',
-    'payment_time' => 'Waktu Selesai',
+    'payment_time' => 'Waktu Pembayaran',
     'to_home_page' => 'Kembali ke halaman utama',
     'to_order_page' => 'Lihat Pesanan Saya',
 ];

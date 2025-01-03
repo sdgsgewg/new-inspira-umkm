@@ -14,10 +14,11 @@ class DesignOption extends Model
 
     public function design()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Design::class);
     }
 
-    public function optionValue() {
+    public function optionValue() 
+    {
         return $this->belongsTo(OptionValue::class);
     }
 }

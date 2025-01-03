@@ -98,17 +98,17 @@ Route::middleware('auth')->prefix('subscriptions')->as('subscriptions.')->group(
     ->name('checkout');
     
     // Payment Snap Page
-    Route::get('/payment/snap/{subscription:id}', [SubscriptionController::class, 'payment'])
+    Route::get('/payment/snap/{subscription:subscription_number}', [SubscriptionController::class, 'payment'])
     ->middleware(['CheckRole:buyer', 'CheckSubscriptionPayment'])
     ->name('snap');
 
     // Cancel Payment
-    Route::get('/payment/cancel/{subscription:id}', [SubscriptionController::class, 'cancelPayment'])
+    Route::get('/payment/cancel/{subscription:subscription_number}', [SubscriptionController::class, 'cancelPayment'])
     ->middleware('CheckRole:buyer')
     ->name('cancel');
 
     // Payment Success Page
-    Route::get('/payment/success/{subscription:id}', [SubscriptionController::class, 'success'])
+    Route::get('/payment/success/{subscription:subscription_number}', [SubscriptionController::class, 'success'])
     ->middleware('CheckRole:buyer')
     ->name('payment-success');
 
@@ -119,7 +119,7 @@ Route::middleware('auth')->prefix('subscriptions')->as('subscriptions.')->group(
 
 Route::prefix('promotions')->as('promotions.')->group(function() {
     // Show Design Selection Based on Promotion
-    Route::get('/designs/{promotion:id}', [PromotionController::class, 'showDesignSelection'])
+    Route::get('/designs/{promotion:slug}', [PromotionController::class, 'showDesignSelection'])
     ->middleware('CheckRole:buyer')
     ->name('designs');
 
@@ -181,7 +181,7 @@ Route::middleware(['auth', 'IsBuyer'])->prefix('checkouts')->as('checkouts.')->g
 // ROUTE FOR TRANSACTION
 
 Route::middleware('auth')->prefix('transactions')->as('transactions.')->group(function () {
-    // Route for order request
+    // Route for order request page (admin)
     Route::get('/orderRequest', [TransactionController::class, 'orderRequest'])->name('orderRequest');
 
     // Route for update transaction status
@@ -189,29 +189,33 @@ Route::middleware('auth')->prefix('transactions')->as('transactions.')->group(fu
     ->name('updateStatus');
 
     // Payment Summary Page
-    Route::post('/payment', [PaymentController::class, 'payment'])
-    ->middleware('CheckRole:buyer')
+    Route::get('/payment/{transaction:order_number}', [PaymentController::class, 'showPayment'])
+    ->middleware(['CheckRole:buyer', 'CheckTransactionPayment', 'CheckPaymentPage'])
     ->name('payment');
 
     //Payment Promo Summary Page
-    Route::post('/payment-promo', [PaymentController::class, 'paymentPromo'])
-    ->middleware('CheckRole:buyer')
+    Route::get('/payment-promo/{transaction:order_number}', [PaymentController::class, 'showPaymentPromo'])
+    ->middleware(['CheckRole:buyer', 'CheckTransactionPayment', 'CheckPaymentPage'])
     ->name('paymentPromo');
 
     // Payment Snap Page
-    Route::get('/payment/snap/{transaction:order_number}', [PaymentController::class, 'processPayment'])
-    ->middleware(['CheckTransactionPayment', 'CheckRole:buyer'])
+    Route::get('/payment/snap/{transaction:order_number}', [PaymentController::class, 'showPaymentSnap'])
+    ->middleware(['CheckRole:buyer', 'CheckTransactionPayment', 'CheckPaymentSnap'])
     ->name('snap');
 
     // Payment Success Page
-    Route::get('/payment/success/{transaction:order_number}', [PaymentController::class, 'handlePaymentSuccess'])
-    ->middleware(['CheckTransactionPayment', 'CheckRole:buyer'])
+    Route::get('/payment/success/{transaction:order_number}', [PaymentController::class, 'showPaymentSuccess'])
+    ->middleware(['CheckRole:buyer', 'CheckTransactionPayment', 'CheckPaymentSuccess'])
     ->name('payment-success');
 
     // Cancel payment
     Route::get('/payment/cancel/{transaction:order_number}', [TransactionController::class, 'cancelPayment'])
-    ->middleware(['CheckTransactionPayment', 'CheckRole:buyer'])
+    ->middleware(['CheckRole:buyer', 'CheckTransactionPayment'])
     ->name('payment-cancel');
+
+    // Route for storing additional transaction data
+    Route::post('/store-transaction/{transaction:order_number}', [TransactionController::class, 'storeAdditionalData'])
+    ->name('store-transaction');
 
     // Resource Route
     Route::resource('/', TransactionController::class)->parameters(['' => 'transaction']);

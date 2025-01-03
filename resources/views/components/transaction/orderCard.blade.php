@@ -62,7 +62,7 @@
                     </form>
                     {{-- Next Status: Pending --}}
                 @else
-                    <a href="{{ route('transactions.snap', ['transaction' => $transaction->order_number]) }}"
+                    <a href="{{ route('transactions.payment', ['transaction' => $transaction->order_number]) }}"
                         class="btn btn-primary">
                         @lang('order.statusLabels.' . $statusLabels[$status] ?? $status)
                     </a>

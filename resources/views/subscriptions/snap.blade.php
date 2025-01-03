@@ -35,7 +35,8 @@
                 {{-- Payment Decision --}}
                 <div class="d-flex flex-row align-items-center justify-content-center gap-3">
                     {{-- Cancel --}}
-                    <a href="{{ route('subscriptions.cancel', $subscription) }}" class="btn btn-danger">
+                    <a href="{{ route('subscriptions.cancel', ['subscription' => $subscription->subscription_number]) }}"
+                        class="btn btn-danger">
                         @lang('subscriptions.button.cancel')
                     </a>
 
@@ -68,7 +69,7 @@
             snap.pay('{{ $subsPayment->snap_token }}', {
                 onSuccess: function(result) {
                     window.location.href =
-                        '{{ route('subscriptions.payment-success', ['subscription' => $subscription->id]) }}';
+                        '{{ route('subscriptions.payment-success', ['subscription' => $subscription->subscription_number]) }}';
                 },
                 onPending: function(result) {
                     document.getElementById('payment-loading').classList.add('d-none');

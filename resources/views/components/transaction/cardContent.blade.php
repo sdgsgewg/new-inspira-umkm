@@ -47,7 +47,7 @@
                     <p class="text-end">x{{ $design->pivot->quantity }}</p>
                 </div>
                 <div>
-                    <p class="text-end">Rp{{ number_format($design->price, 0, ',', '.') }}</p>
+                    <p class="text-end">{{ 'Rp' . number_format($design->price, 0, ',', '.') }}</p>
                 </div>
             </div>
         </div>

@@ -8,148 +8,199 @@ use App\Models\OptionValue;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\Promotion;
+use App\Models\Shipping;
 use App\Models\ShippingMethod;
 use App\Models\Transaction;
 use App\Models\TransactionDesign;
+use App\Models\TransactionPromotion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
-    public function payment(Request $request)
+    public function showPayment(Transaction $transaction)
     {
-        $request->validate([
-            'option_value_id.*' => 'required',
-            'notes' => 'nullable',
-            'payment_method_id' => 'required',
-            'shipping_method_id' => 'required'
-        ]);
-    
-        // Fetch option values
-        $optionValues = $request->input('option_value_id');
-        $optionValueOutputs = [];
+        $transactionId = $transaction->id;
+
+        // Get Seller
+        $seller = $transaction->seller;
         
-        foreach ($optionValues as $designId => $options) {
-            $design = Design::find($designId);
-    
-            foreach ($options as $optionId => $optionValueId) {
-                $option = Option::find($optionId);
-                $optionValue = OptionValue::find($optionValueId);
-    
-                $optionValueOutputs[] = "{$design->product->name} {$option->name} ({$design->title}): {$optionValue->value}";
-            }
+        // Fetch All Designs from the transaction
+        $designs = $transaction->designs;
+
+        // Get Product Amount
+        $productAmount = 0;
+        foreach ($designs as $design) {
+            $productAmount += $design['pivot']['quantity'];
         }
-    
-        // Retrieve notes and payment/shipping methods
-        $notes = $request->input('notes');
-        $paymentMethodId = $request->input('payment_method_id');
-        $paymentMethod = PaymentMethod::findOrFail($paymentMethodId);
-    
-        $shippingMethodId = $request->input('shipping_method_id');
-        $shippingMethod = ShippingMethod::findOrFail($shippingMethodId);
-    
-        // Determine source and fetch quantities or items
-        $source = $request->input('source', session('fromPage'));
-        $quantity = $source === 'DesignDetail' ? $request->input('quantity') : null;
-    
-        $checkoutItems = json_decode($request->input('checkoutItems'), true);
-        $productAmount = json_decode($request->input('productAmount'), true);
-        $checkoutItemsPrice = json_decode($request->input('checkoutItemsPrice'), true);
-        $subTotalPrice = $request->input('subTotalPrice');
+
+        // Get Subtotal for all products
+        $subTotalPrice = 0;
+        foreach ($designs as $design) {
+            $subTotalPrice += $design->pivot->sub_total_price;
+        }
+
+        // Fetch Option Values for Each Design
+        $optionValueResults = DB::table('transaction_designs as td')
+        ->join('design_options as do', 'td.design_id', '=', 'do.design_id')
+        ->join('designs as d', 'td.design_id', '=', 'd.id')
+        ->join('products as p', 'd.product_id', '=', 'p.id')
+        ->join('option_values as ov', 'do.option_value_id', '=', 'ov.id')
+        ->join('options as o', 'ov.option_id', '=', 'o.id')
+        ->where('td.transaction_id', $transactionId)
+        ->groupBy('td.design_id', 'd.title', 'p.name', 'o.name', 'ov.value') // Tambahkan kolom non-agregat ke GROUP BY
+        ->select(
+            'td.design_id',
+            // Design Name
+            'd.title as design_title',
+            // Product Name
+            'p.name as product_name',
+            // Option Name
+            'o.name as option_name',
+            // Option Value
+            'ov.value as option_value'
+        )
+        ->get();
+
+        // Get Transaction Notes
+        $notes = $transaction['notes'];
+        
+        // Get Shipping Method
+        $shippingMethod = $transaction->shipping->shippingMethod;
+        
+        // Fetch All Payment Methods
+        $paymentMethods = PaymentMethod::all();
+
+        // Fetch Shipping Fee
+        $shippingFee = $shippingMethod['shipping_fee'];
+
+        // Fetch Service Fee
+        $serviceFee = $transaction['service_fee'];
+
+        // Fetch Grand Total Price
+        $grandTotalPrice = $transaction['grand_total_price'];
     
         return view('checkout.payment', [
             'title' => 'Payment',
-            'optionValues' => $optionValues,
-            'optionValueOutputs' => $optionValueOutputs,
-            'notes' => $notes,
-            'paymentMethod' => $paymentMethod,
-            'shippingMethod' => $shippingMethod,
-            'checkoutItems' => $checkoutItems,
+            'transaction' => $transaction,
+            'seller' => $seller,
+            'designs' => $designs,
             'productAmount' => $productAmount,
-            'checkoutItemsPrice' => $checkoutItemsPrice,
+            'optionValueResults' => $optionValueResults,
+            'notes' => $notes,
+            'shippingMethod' => $shippingMethod,
+            'paymentMethods' => $paymentMethods,
             'subTotalPrice' => $subTotalPrice,
-            'quantity' => $quantity,
-            'source' => $source,
+            'shippingFee' => $shippingFee,
+            'serviceFee' => $serviceFee,
+            'grandTotalPrice' => $grandTotalPrice,
         ]);
     }
 
-    public function paymentPromo(Request $request)
+    public function showPaymentPromo(Transaction $transaction)
     {
-        $request->validate([
-            'option_value_id.*' => 'required',
-            'notes' => 'nullable',
-            'payment_method_id' => 'required',
-            'shipping_method_id' => 'required'
-        ]);
-    
-        // Fetch option values
-        $optionValues = $request->input('option_value_id');
-        $optionValueOutputs = [];
-        
-        foreach ($optionValues as $designId => $options) {
-            $design = Design::find($designId);
-    
-            foreach ($options as $optionId => $optionValueId) {
-                $option = Option::find($optionId);
-                $optionValue = OptionValue::find($optionValueId);
-    
-                $optionValueOutputs[] = "{$design->product->name} {$option->name} ({$design->title}): {$optionValue->value}";
-            }
-        }
-    
-        // Retrieve notes and payment/shipping methods
-        $notes = $request->input('notes');
-        $paymentMethodId = $request->input('payment_method_id');
-        $paymentMethod = PaymentMethod::findOrFail($paymentMethodId);
-    
-        $shippingMethodId = $request->input('shipping_method_id');
-        $shippingMethod = ShippingMethod::findOrFail($shippingMethodId);
-    
-        // Determine source and fetch quantities or items
-        $source = $request->input('source', session('fromPage'));
-        $quantity = $request->input('quantity');
-    
-        $checkoutItems = json_decode($request->input('checkoutItems'), true);
-        $productAmount = json_decode($request->input('productAmount'), true);
-        $checkoutItemsPrice = json_decode($request->input('checkoutItemsPrice'), true);
-        $subTotalPrice = $request->input('subTotalPrice');
-        $promotionPrice = $request->input('promotionPrice');
+        $transactionId = $transaction->id;
 
-        // Get Promotion Data
-        $promotion = Promotion::where('id', $request->promotion_id)->first();
-    
+        // Get Seller
+        $seller = $transaction->seller;
+        
+        // Fetch All Promotions from the Transaction
+        $promotions = $transaction->promotions;
+        $quantity = 1;
+
+        // Fetch All Designs from the Transaction
+        $designs = $transaction->designs;
+
+        // Get Product Amount
+        $productAmount = 0;
+        foreach ($designs as $design) {
+            $productAmount += $design['pivot']['quantity'];
+        }
+
+        // Get Subtotal for all products
+        $subTotalPrice = 0;
+        foreach ($designs as $design) {
+            $subTotalPrice += $design->pivot->sub_total_price;
+        }
+
+        // Fetch Option Values for Each Design
+        $optionValueResults = DB::table('transaction_designs as td')
+        ->join('design_options as do', 'td.design_id', '=', 'do.design_id')
+        ->join('designs as d', 'td.design_id', '=', 'd.id')
+        ->join('products as p', 'd.product_id', '=', 'p.id')
+        ->join('option_values as ov', 'do.option_value_id', '=', 'ov.id')
+        ->join('options as o', 'ov.option_id', '=', 'o.id')
+        ->where('td.transaction_id', $transactionId)
+        ->groupBy('td.design_id', 'd.title', 'p.name', 'o.name', 'ov.value') // Tambahkan kolom non-agregat ke GROUP BY
+        ->select(
+            'td.design_id',
+            // Design Name
+            'd.title as design_title',
+            // Product Name
+            'p.name as product_name',
+            // Option Name
+            'o.name as option_name',
+            // Option Value
+            'ov.value as option_value'
+        )
+        ->get();
+
+        // Get Transaction Notes
+        $notes = $transaction['notes'];
+
+        // Get Shipping Method
+        $shippingMethod = $transaction->shipping->shippingMethod;
+        
+        // Fetch All Payment Methods
+        $paymentMethods = PaymentMethod::all();
+
+        // Fetch Shipping Fee
+        $shippingFee = $shippingMethod['shipping_fee'];
+
+        // Fetch Service Fee
+        $serviceFee = $transaction['service_fee'];
+
+        // Fetch Grand Total Price
+        $grandTotalPrice = $transaction['grand_total_price'];
+
         return view('checkout.payment-promo', [
             'title' => 'Payment',
-            'optionValues' => $optionValues,
-            'optionValueOutputs' => $optionValueOutputs,
-            'notes' => $notes,
-            'paymentMethod' => $paymentMethod,
-            'shippingMethod' => $shippingMethod,
-            'checkoutItems' => $checkoutItems,
-            'productAmount' => $productAmount,
-            'checkoutItemsPrice' => $checkoutItemsPrice,
-            'subTotalPrice' => $subTotalPrice,
-            'promotionPrice' => $promotionPrice,
-            'promotion' => $promotion,
+            'transaction' => $transaction,
+            'seller' => $seller,
+            'promotions' => $promotions,
             'quantity' => $quantity,
-            'source' => $source,
+            'productAmount' => $productAmount,
+            'optionValueResults' => $optionValueResults,
+            'notes' => $notes,
+            'shippingMethod' => $shippingMethod,
+            'paymentMethods' => $paymentMethods,
+            'subTotalPrice' => $subTotalPrice,
+            'shippingFee' => $shippingFee,
+            'serviceFee' => $serviceFee,
+            'grandTotalPrice' => $grandTotalPrice,
         ]);
     }
     
-    public function processPayment(Transaction $transaction)
+    public function showPaymentSnap(Transaction $transaction)
     {
-        $transaction_designs = TransactionDesign::where('transaction_id', $transaction->id)->get();
+        $designs = $transaction->designs;
+
+        $promotions = $transaction->promotions;
 
         return view('payment.snap', [
             'title' => 'Payment',
             'transaction' => $transaction,
-            'transaction_designs' => $transaction_designs,
+            'designs' => $designs,
+            'promotions' => $promotions,
         ]);
     }
 
-    public function handlePaymentSuccess(Transaction $transaction)
+    public function showPaymentSuccess(Transaction $transaction)
     {
         // Update Transaction Status as Pending
-        $transaction->transaction_status = "Pending";
+        $transaction->update([
+            'transaction_status' => "Pending",
+        ]);
         $transaction->save();
 
         // Get Payment Model
@@ -164,6 +215,9 @@ class PaymentController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'Payment record not found.']);
         }
+
+        // Hapus session yang menandai Snap Page telah diakses
+        session()->forget("snap_accessed_{$transaction->id}");
 
         // Set session of selected status as Pending
         session(['selectedStatus' => $transaction->transaction_status]);

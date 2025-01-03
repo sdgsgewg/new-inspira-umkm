@@ -30,7 +30,9 @@
                             <option value="{{ $value->id }}"
                                 {{ old('option_value_id.' . $design->id . '.' . $option->id) == $value->id ? 'selected' : '' }}>
                                 @php
-                                    $valueName = Lang::has('options.values.' . $value->value) ? __('options.values.' . $value->value) : $value->value;
+                                    $valueName = Lang::has('options.values.' . $value->value)
+                                        ? __('options.values.' . $value->value)
+                                        : $value->value;
                                 @endphp
                                 {{ $valueName }}
                             </option>

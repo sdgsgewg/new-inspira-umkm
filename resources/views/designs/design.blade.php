@@ -64,10 +64,10 @@
                             </span></p>
                     @endif
 
-                    <div class="d-flex flex-column flex-md-row gap-3 mt-auto">
+                    <div class="col-6 col-md-12 d-flex flex-column flex-md-row gap-3 mt-auto">
                         @if (auth()->check() && auth()->user()->id !== $design->seller->id)
                             {{-- Add to Cart --}}
-                            <button class="btn {{ $design->stock > 0 ? 'btn-primary' : 'btn-secondary' }} d-inline-flex"
+                            <button class="btn {{ $design->stock > 0 ? 'btn-primary' : 'btn-secondary' }} d-inline-flex justify-content-center align-items-center"
                                 data-bs-toggle="modal" data-bs-target="#quantityModal" data-action="add-to-cart"
                                 data-route="{{ route('carts.store') }}" data-submit="{{ __('quantity.add_to_cart') }}"
                                 {{ $design->stock == 0 ? 'disabled' : '' }}>
@@ -75,7 +75,7 @@
                             </button>
 
                             {{-- Checkout --}}
-                            <button class="btn {{ $design->stock > 0 ? 'btn-success' : 'btn-secondary' }} d-inline-flex"
+                            <button class="btn {{ $design->stock > 0 ? 'btn-success' : 'btn-secondary' }} d-inline-flex justify-content-center align-items-center"
                                 data-bs-toggle="modal" data-bs-target="#quantityModal" data-action="checkout"
                                 data-route="{{ route('checkouts.checkoutFromDesign') }}"
                                 data-submit="{{ __('quantity.checkout') }}" {{ $design->stock == 0 ? 'disabled' : '' }}>

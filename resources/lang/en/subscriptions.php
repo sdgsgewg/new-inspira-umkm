@@ -35,7 +35,8 @@ return [
 
     'button' => [
         'cancel' => 'Cancel',
-        'pay_now' => 'Pay Now',
+        'subscribe' => 'Subscribe',
+        'pay_now' => 'Pay Now'
     ],
 
     // Payment Snap Page

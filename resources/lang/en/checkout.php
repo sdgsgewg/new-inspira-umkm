@@ -4,6 +4,7 @@ return [
     // Checkout Page
     'title' => [
         'Checkout' => 'Checkout',
+        'Payment' => 'Payment'
     ],
     'delivery_address' => 'Delivery Address',
     'ordered_amount' => 'Ordered Amount',
@@ -20,8 +21,8 @@ return [
     'select_shipping_method' => 'Select a shipping method',
     
     'button' => [
+        'checkout' => 'Checkout',
         'proceed_to_payment' => 'Proceed to Payment',
-        'create_order' => 'Create Order',
         'cancel' => 'Cancel',
         'pay_now' => 'Pay Now',
     ],
@@ -29,13 +30,14 @@ return [
     // Payment Page
     'order_detail' => 'Order Detail',
     'order_summary' => 'Order Summary',
-    'subtotal' => 'Subtotal for Product',
     'shipping_fee' => 'Shipping Fee',
     'service_fee' => 'Service Fee',
     'total_payment' => 'Total Payment',
-
+    
     // Payment Snap Page
     'checkout_details' => 'Checkout Details',
+    'subtotal_for_design' => 'Subtotal for Design',
+    'subtotal_for_promo' => 'Subtotal for Promotion',
 
     // Loading
     'loading' => 'Loading...',
@@ -47,7 +49,7 @@ return [
     'to' => 'To',
     'payment_method_success' => 'Payment Method',
     'transaction_number' => 'Transaction Number',
-    'payment_time' => 'Completed Time',
+    'payment_time' => 'Payment Time',
     'to_home_page' => 'Back to Home Page',
     'to_order_page' => 'View My Orders',
 ];

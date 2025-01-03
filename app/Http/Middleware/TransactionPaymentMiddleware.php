@@ -22,15 +22,9 @@ class TransactionPaymentMiddleware
         // Ambil data user
         $user = Auth::user();
         
+        // Redirect ke home page jika yang akses bukan buyer
         if ($transaction->buyer->id !== $user->id) {
             return redirect()->route('home');
-        }
-    
-        // Lakukan pengecekan pada Payment terkait
-        $payment = $transaction->payment;
-    
-        if ($payment->payment_status === 'Paid') {
-            return redirect()->route('transactions.payment-success', $transaction->order_number);
         }
     
         return $next($request);

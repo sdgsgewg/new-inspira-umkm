@@ -17,4 +17,5 @@ return [
     'register' => 'Daftar',
     'have_account' => 'Sudah memiliki akun?',
     'login' => 'Masuk di sini!',
+    'registration_success' => 'Registrasi Berhasil! Silahkan Login!'
 ];

@@ -68,13 +68,8 @@ class SubscriptionController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    private function calcEndDate($plan)
     {
-        $plan = json_decode($request->plan, true); // true untuk array, false untuk objek
-
         $billing_cycle = $plan['billing_cycle'];
         if( $billing_cycle == 'daily') {
             $endDate = now()->addDays(1);
@@ -86,6 +81,11 @@ class SubscriptionController extends Controller
             $endDate = now()->addYears(1);
         }
 
+        return $endDate;
+    }
+
+    private function storeSubscription($plan, $endDate)
+    {
         $subscription = Subscription::create([
             'user_id' => Auth::user()->id,
             'plan_id' => $plan['id'],
@@ -95,16 +95,40 @@ class SubscriptionController extends Controller
             'auto_renew' => true
         ]);
 
+        $subscription->subscription_number = 'SB-' . now()->format('Ymd') . '-' . str_pad($subscription->id, 6, '0', STR_PAD_LEFT);
+        $subscription->save();
+
+        return $subscription;
+    }
+
+    private function storeSubsPayment($subscriptionId, $paymentMethodId, $planPrice)
+    {
         $subsPayment = SubscriptionPayment::create([
-            'subscription_id' => $subscription['id'],
-            'payment_method_id' => $request->payment_method_id,
-            'amount' => $plan['price'],
+            'subscription_id' => $subscriptionId,
+            'payment_method_id' => $paymentMethodId,
+            'amount' => $planPrice,
             'payment_status' => 'Pending'
         ]);
 
+        return $subsPayment;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $plan = json_decode($request->plan, true); // true untuk array, false untuk objek
+
+        $endDate = $this->calcEndDate($plan);
+
+        $subscription = $this->storeSubscription($plan, $endDate);
+
+        $subsPayment = $this->storeSubsPayment($subscription['id'], $request->payment_method_id, $plan['price']);
+
         $this->processPayment($subsPayment);
 
-        return redirect()->route('subscriptions.snap', $subscription->id);
+        return redirect()->route('subscriptions.snap', $subscription->subscription_number);
     }
 
     public function cancelPayment(Subscription $subscription)
@@ -132,7 +156,7 @@ class SubscriptionController extends Controller
 
         $params = array(
             'transaction_details' => array(
-                'order_id' => rand(),
+                'order_id' => $subsPayment->subscription->subscription_number,
                 'gross_amount' => $subsPayment['amount'],
             ),
             'customer_details' => array(

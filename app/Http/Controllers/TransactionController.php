@@ -104,8 +104,6 @@ class TransactionController extends Controller
     private function storeDesignOptions($optionValues)
     {
         // Masukkan data ke tabel 'design_options'
-        $optionValues = json_decode($optionValues, true);
-
         foreach ($optionValues as $designId => $options) {
             foreach ($options as $optionId => $optionValueId) {
                 $designOption = DesignOption::create([
@@ -155,14 +153,44 @@ class TransactionController extends Controller
         ]);
     }
 
-    private function storePayment($transactionId, $payment_method_id, $totalPrice)
+    private function updateDesignStock($designId, $quantity)
     {
-        $payment = Payment::create([
-            'transaction_id' => $transactionId,
-            'payment_method_id' => $payment_method_id,
-            'amount' => $totalPrice
-        ]);
-        $payment->save();
+        $designModel = Design::find($designId);
+        $designModel->stock -= $quantity;
+        $designModel->save();
+    }
+
+    private function processTransactionPerSeller($sellerId, $sellerGroup, $request)
+    {
+        $transaction = $this->storeTransaction($sellerId, $request->subTotalPrice, $request->serviceFee, $request->grandTotalPrice, $request->notes);
+
+        $designIds = [];
+
+        foreach ($sellerGroup['items'] as $design) {
+            $quantity = $request->source !== 'Cart' ? $request->quantity : $design['pivot']['quantity'];
+
+            $this->updateDesignStock($design['id'], $quantity);
+
+            $this->storeTransactionDesign($transaction->id, $design['id'], $quantity, $design['price'] * $quantity);
+
+            $designIds[] = $design['id'];
+        }
+
+        return [$transaction, $designIds];
+    }
+
+    private function processCheckoutItems($checkoutItems, $request)
+    {
+        $allDesignIds = [];
+        $transactions = [];
+
+        foreach ($checkoutItems as $sellerId => $sellerGroup) {
+            [$transaction, $designIds] = $this->processTransactionPerSeller($sellerId, $sellerGroup, $request);
+            $transactions[] = $transaction;
+            $allDesignIds = array_merge($allDesignIds, $designIds);
+        }
+
+        return [$transactions, $allDesignIds];
     }
 
     private function storeShipping($transactionId, $shipping_method_id)
@@ -186,66 +214,78 @@ class TransactionController extends Controller
         return "{$prefix}-{$timestamp}-{$uniqueId}";
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    private function clearCartItems($designIds)
     {
-        // Masukkan data ke tabel 'design_options'
-        $this->storeDesignOptions($request->optionValues);
-
-        $checkoutItems = json_decode($request->checkoutItems, true);
-
-        $designIds = [];
-
-        foreach ($checkoutItems as $sellerId => $sellerGroup) {
-
-            // Masukkan data ke tabel 'transactions'
-            $transaction = $this->storeTransaction($sellerId, $request->subTotalPrice, $request->serviceFee, $request->totalPrice, $request->notes);
-
-            foreach ($sellerGroup['items'] as $design) {
-                if ($request->source !== 'Cart') {
-                    $quantity = $request->quantity;
-                } else {
-                    $quantity = $design['pivot']['quantity'];
-                }
-
-                $designModel = Design::find($design['id']);
-
-                // Mengurangi jumlah stok design yang dibeli
-                $designModel['stock'] -= $quantity;
-                $designModel->save();
-
-                // Masukkan data ke tabel 'transaction_designs'
-                $this->storeTransactionDesign($transaction->id, $design['id'], $quantity, $design['price'] * $quantity);
-
-                $designIds[] = $design['id'];
-            }
-        }
-
-        // Masukkan data ke tabel 'transaction_promotions'
-        if ($request->source === 'DesignSelection') {
-            $this->storeTransactionPromotion($transaction->id, $request->promotion_id, $request->quantity, $request->subTotalPrice);
-        }
-
-        // Masukkan data ke tabel 'payments'
-        $this->storePayment($transaction->id, $request->payment_method_id, $request->totalPrice);
-
-        // Masukkan data ke tabel 'shippings'
-        $this->storeShipping($transaction->id, $request->shipping_method_id);
-
         $cart = Cart::where('user_id', Auth::id())->first();
 
         if ($cart) {
-            // Hapus semua item yang telah dibeli dari cart
             $cart->designs()->detach($designIds);
         }
+    }
 
-        // Set selected status ad Pending
-        session(['selectedStatus' => 'Pending']);
+    // Store transaction data on these table:
+    // - design_options
+    // - transactions
+    // - transaction_designs
+    // - transaction_promotions
+    // - shippings
+    // Then, clear design from cart if source page from cart page
+    // Flow:
+    // Checkout Page -> store -> Payment Page
+    public function store(Request $request)
+    {
+        $request->validate([
+            'option_value_id.*.*' => 'required|exists:option_values,id',
+        ]);
+        $optionValues = $request->input('option_value_id');
+
+        $this->storeDesignOptions($optionValues);
+    
+        $checkoutItems = json_decode($request->checkoutItems, true);
+    
+        [$transactions, $designIds] = $this->processCheckoutItems($checkoutItems, $request);
+    
+        if ($request->source === 'DesignSelection') {
+            $this->storeTransactionPromotion($transactions[0]->id, $request->promotion_id, $request->quantity, $request->subTotalPrice);
+        }
+
+        $this->storeShipping($transactions[0]->id, $request->shipping_method_id);
+    
+        if ($request->source === 'Cart') {
+            $this->clearCartItems($designIds);
+        }
+    
+        if ($request->source === 'DesignSelection') {
+            return redirect()->route('transactions.paymentPromo', ['transaction' => $transactions[0]->order_number]);
+        }
+
+        return redirect()->route('transactions.payment', ['transaction' => $transactions[0]->order_number]);
+    }
+
+    private function storePayment($transactionId, $payment_method_id, $totalPrice)
+    {
+        $payment = Payment::create([
+            'transaction_id' => $transactionId,
+            'payment_method_id' => $payment_method_id,
+            'amount' => $totalPrice
+        ]);
+        $payment->save();
+    }
+    
+    // Store transaction data on these table:
+    // - payments
+    // - shippings
+    // Then, generate snap_token
+    // Flow:
+    // Payment Page -> store -> Payment Snap Page
+    public function storeAdditionalData(Request $request, Transaction $transaction)
+    {
+        $this->storePayment($transaction->id, $request->payment_method_id, $transaction->grand_total_price);
+
+        session(['selectedStatus' => 'Not Paid']);
 
         $this->processPayment($transaction);
-
+    
         return redirect()->route('transactions.snap', ['transaction' => $transaction->order_number]);
     }
 
@@ -253,16 +293,21 @@ class TransactionController extends Controller
     {
         // Set Failed Message
         session()->flash('failed', __('order.payment_cancelled'));
-
+    
         // Update transaction status
         $transaction->transaction_status = 'Not Paid';
         $transaction->save();
-
+    
+        // Reset session flag for Snap Page
+        if(session()->has("snap_accessed_{$transaction->id}")) {
+            session()->forget("snap_accessed_{$transaction->id}");
+        }
+    
         // Set session of selected status
         session(['selectedStatus' => $transaction->transaction_status]);
-
+    
         return redirect()->route('transactions.index');
-    }
+    }    
 
     private function processPayment(Transaction $transaction)
     {

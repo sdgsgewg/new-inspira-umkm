@@ -91,28 +91,31 @@
     </div>
 
     {{-- Payment Information --}}
-    <div class="row justify-content-center mt-3">
-        <div class="col-11">
-            <div class="card d-flex flex-column">
-                <div class="card-header d-inline-flex">
-                    <i class="bi bi-wallet me-2"></i>
-                    <p class="fw-bold m-0">@lang('order.payment')</p>
-                </div>
-                <div class="card-body">
-                    {{-- Payment Method --}}
-                    <div class="d-flex justify-content-between">
-                        <p>@lang('order.payment_method')</p>
-                        <p>{{ $transaction->payment->paymentMethod->name }}</p>
+    @if ($transaction->payment)
+        <div class="row justify-content-center mt-3">
+            <div class="col-11">
+                <div class="card d-flex flex-column">
+                    <div class="card-header d-inline-flex">
+                        <i class="bi bi-wallet me-2"></i>
+                        <p class="fw-bold m-0">@lang('order.payment')</p>
                     </div>
-                    {{-- Payment Status --}}
-                    <div class="d-flex justify-content-between">
-                        <p class="m-0">@lang('order.payment_status')</p>
-                        <p class="m-0">{{ __('order.payment_statuses.' . $transaction->payment->payment_status) }}</p>
+                    <div class="card-body">
+                        {{-- Payment Method --}}
+                        <div class="d-flex justify-content-between">
+                            <p>@lang('order.payment_method')</p>
+                            <p>{{ $transaction->payment->paymentMethod->name }}</p>
+                        </div>
+                        {{-- Payment Status --}}
+                        <div class="d-flex justify-content-between">
+                            <p class="m-0">@lang('order.payment_status')</p>
+                            <p class="m-0">{{ __('order.payment_statuses.' . $transaction->payment->payment_status) }}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
     {{-- Infomasi Detail Transaksi --}}
     <div class="row justify-content-center mt-3">
@@ -134,7 +137,7 @@
                         </div>
 
                         {{-- Payment Time --}}
-                        @if ($transaction->payment->payment_time !== null)
+                        @if ($transaction->payment)
                             <div class="d-flex justify-content-between">
                                 <p>@lang('order.payment_time')</p>
                                 <p>

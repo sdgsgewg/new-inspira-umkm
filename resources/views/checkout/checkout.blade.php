@@ -14,7 +14,7 @@
             </div>
             <hr class="mb-4">
 
-            <form method="POST" action="{{ route('transactions.payment') }}" id="checkout-form">
+            <form method="POST" action="{{ route('transactions.store') }}" id="checkout-form">
                 @csrf
 
                 @if (count($checkoutItems) > 0)
@@ -44,6 +44,7 @@
                         <div class="col-12 col-lg-6">
                             @include('components.checkout.checkout-items')
                         </div>
+
                         {{-- Checkout Confirmation --}}
                         <div class="col-12 col-lg-6 d-flex flex-column ps-lg-5 gap-3 mt-4 mt-lg-0">
                             <h3>@lang('checkout.order_confirmation')</h3>
@@ -58,22 +59,33 @@
                                 <textarea class="w-100" name="notes" id="notes" rows="3" placeholder="@lang('checkout.input_notes')"></textarea>
                             </div>
 
-                            {{-- Payment Method --}}
-                            @include('components.checkout.payment-method')
-
                             {{-- Shipping Method --}}
                             @include('components.checkout.shipping-method')
                         </div>
                     </div>
-                    <hr class="my-4">
 
+                    <div class="col-12 mt-5 mb-4">
+                        <hr>
+                    </div>
+
+                    {{-- Price Summary --}}
+                    @include('components.checkout.price-summary', [
+                        'col' => 'col-12',
+                        'subTotalPrice' => $subTotalPrice,
+                        'shippingFee' => 0,
+                        'serviceFee' => $serviceFee,
+                        'grandTotalPrice' => $subTotalPrice + 0 + $serviceFee,
+                    ])
+
+                    {{-- HIDDEN INPUT --}}
                     {{-- Design Items --}}
                     <input type="hidden" name="checkoutItems" value="{{ json_encode($checkoutItems) }}">
-                    <input type="hidden" name="productAmount" value="{{ json_encode($productAmount) }}">
-                    <input type="hidden" name="checkoutItemsPrice" value="{{ json_encode($checkoutItemsPrice) }}">
 
-                    {{-- Subtotal Price --}}
+                    {{-- Price --}}
                     <input type="hidden" name="subTotalPrice" value="{{ $subTotalPrice }}">
+                    <input type="hidden" name="shippingFee" value="{{ 0 }}">
+                    <input type="hidden" name="serviceFee" value="{{ $serviceFee }}">
+                    <input type="hidden" name="grandTotalPrice" value="{{ 0 }}">
 
                     {{-- Source Page --}}
                     <input type="hidden" name="source" value="{{ session('fromPage') }}">
@@ -82,9 +94,17 @@
                         <input type="hidden" name="quantity" value="{{ $quantity }}">
                     @endif
 
-                    @include('components.checkout.checkout-button', ['navigateTo' => 'proceed_to_payment'])
+                    @include('components.checkout.checkout-button', ['navigateTo' => 'checkout'])
                 @endif
             </form>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        const subtotal = {{ $subTotalPrice }};
+        const serviceFee = {{ $serviceFee }};
+    </script>
+    <script src="{{ secure_asset('js/checkout/price.js') }}"></script>
 @endsection

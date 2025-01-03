@@ -10,34 +10,56 @@
             <div class="card p-4 h-100">
                 <h4 class="text-center mb-4">@lang('checkout.checkout_details')</h4>
                 <div class="d-flex flex-column mb-3">
-                    @foreach ($transaction_designs as $index => $td)
-                        @php
-                            $index++;
-                        @endphp
-                        <div class="d-flex flex-row justify-content-between">
-                            <div class="d-flex flex-column">
+                    @if ($promotions->count())
+                        @foreach ($promotions as $index => $promo)
+                            @php
+                                $index++;
+                            @endphp
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="d-flex flex-column">
+                                    <p>
+                                        <strong>@lang('checkout.subtotal_for_promo') #{{ $index }}</strong>
+                                    </p>
+                                    <p>
+                                        {{ '(' . $promo->title . ')' }}
+                                    </p>
+                                </div>
                                 <p>
-                                    <strong>@lang('checkout.subtotal') #{{ $index }}</strong>
-                                </p>
-                                <p>
-                                    {{ '(' . $td->design->title . ')' }}
+                                    {{ 'Rp' . number_format($promo->price, 2, ',', '.') }}
                                 </p>
                             </div>
-                            <p>
-                                Rp{{ number_format($td->sub_total_price, 2, ',', '.') }}
-                            </p>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @else
+                        @foreach ($designs as $index => $design)
+                            @php
+                                $index++;
+                            @endphp
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="d-flex flex-column">
+                                    <p>
+                                        <strong>@lang('checkout.subtotal_for_design') #{{ $index }}</strong>
+                                    </p>
+                                    <p>
+                                        {{ '(' . $design->title . ')' }}
+                                    </p>
+                                </div>
+                                <p>
+                                    {{ 'Rp' . number_format($design->pivot->sub_total_price, 2, ',', '.') }}
+                                </p>
+                            </div>
+                        @endforeach
+                    @endif
+
                     <div class="d-flex flex-row justify-content-between">
                         <p class="text-start"><strong>@lang('checkout.shipping_fee')</strong></p>
                         <p class="text-end">
-                            Rp{{ number_format($transaction->shipping->shippingMethod->shipping_fee, 2, ',', '.') }}
+                            {{ 'Rp' . number_format($transaction->shipping->shippingMethod->shipping_fee, 2, ',', '.') }}
                         </p>
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                         <p class="text-start"><strong>@lang('checkout.service_fee')</strong></p>
                         <p class="text-end">
-                            Rp{{ number_format($transaction->service_fee, 2, ',', '.') }}
+                            {{ 'Rp' . number_format($transaction->service_fee, 2, ',', '.') }}
                         </p>
                     </div>
                     <div>
@@ -48,7 +70,7 @@
                             <strong>@lang('checkout.total_payment')</strong>
                         </p>
                         <p class="text-end">
-                            Rp{{ number_format($transaction->grand_total_price, 2, ',', '.') }}
+                            {{ 'Rp' . number_format($transaction->grand_total_price, 2, ',', '.') }}
                         </p>
                     </div>
                 </div>

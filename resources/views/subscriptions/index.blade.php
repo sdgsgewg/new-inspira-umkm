@@ -84,7 +84,7 @@
                         <div>
                             {{-- Action Button --}}
                             @if ($subs->status === 'pending')
-                                <a href="{{ route('subscriptions.snap', $subs->id) }}"
+                                <a href="{{ route('subscriptions.snap', $subs->subscription_number) }}"
                                     class="btn btn-primary text-decoration-none px-4 py-1">
                                     @lang('subscriptions.pay_now')
                                 </a>
