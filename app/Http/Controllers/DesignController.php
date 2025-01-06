@@ -109,7 +109,7 @@ class DesignController extends Controller
         }
     
         // For regular requests, paginate the designs
-        $filteredDesigns = $filteredQuery->paginate(12)->appends($request->query());
+        $filteredDesigns = $filteredQuery->paginate(8)->appends($request->query());
 
         $avgDesignRating = DB::table('designs as d')
         ->join('design_reviews as dr', 'd.id', '=', 'dr.design_id')

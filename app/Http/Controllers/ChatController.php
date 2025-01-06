@@ -16,13 +16,15 @@ class ChatController extends Controller
     // Display user's chat list
     public function index()
     {
-        if (Auth::user()->is_admin) {
-            $chats = Auth::user()
+        $user = Auth::user();
+
+        if ($user->is_admin) {
+            $chats = $user
                 ->sellerChats()
                 ->with(['buyer', 'messages'])
                 ->get();
         } else {
-            $chats = Auth::user()
+            $chats = $user
                 ->buyerChats()
                 ->with(['seller', 'messages'])
                 ->get();
@@ -54,22 +56,26 @@ class ChatController extends Controller
             'sender_id' => Auth::user()->id,
             'message_text' => $request->message,
         ]);
+
+        return redirect()->back();
     
-        return response()->json([
-            'sender_id' => $message->sender_id,
-            'message_text' => $message->message_text,
-            'timestamp' => $message->created_at->timezone('Asia/Jakarta')->format('H:i'),
-        ]);
+        // return response()->json([
+        //     'sender_id' => $message->sender_id,
+        //     'message_text' => $message->message_text,
+        //     'timestamp' => $message->created_at->timezone('Asia/Jakarta')->format('H:i'),
+        // ]);
     }    
 
     // Show chat conversation between two users
     public function show(Chat $chats)
     {
+        $userId = Auth::user()->id;
+
         $buyer = $chats->buyer;
         $seller = $chats->seller;
 
         // Determine recipient based on logged-in user
-        $recipient = Auth::user()->id === $seller->id ? $buyer : $seller;
+        $recipient = $userId === $seller->id ? $buyer : $seller;
     
         return view('chats.chat', [
             'title' => 'Chat',

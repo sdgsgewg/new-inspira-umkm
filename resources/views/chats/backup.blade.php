@@ -26,19 +26,7 @@
 
                 <div class="chat-content" id="chat-messages">
                     @forelse ($chat->messages as $message)
-                        @php
-                            $isSender = auth()->user()->id === $message->sender->id;
-                        @endphp
-                        <div class="message {{ $isSender ? 'sent' : 'received' }} pb-2">
-                            <div class="message-bubble">
-                                <p class="m-0">{{ $message->message_text }}</p>
-                            </div>
-                            <div class="message-info {{ $isSender ? 'sent' : 'received' }}">
-                                <span class="timestamp">
-                                    {{ \Carbon\Carbon::parse($message->created_at)->timezone('Asia/Jakarta')->format('H:i') }}
-                                </span>
-                            </div>
-                        </div>
+                        {{-- Chat message will be loaded in the JS file --}}
                     @empty
                         <p class="text-center text-muted">No messages yet. Be the first to send a message!</p>
                     @endforelse
@@ -56,4 +44,14 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const chatId = @json($chat->id);
+        const userId = @json(auth()->user()->id);
+        const chatStoreUrl = "{{ route('chats.store') }}";
+    </script>
+    <script src="{{ secure_asset('js/chat.js') }}?v={{ time() }}"></script>
 @endsection
