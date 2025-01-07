@@ -5,15 +5,15 @@
                 <a href="{{ route('home') }}" class="d-flex align-items-center mb-3">
                     <img src="{{ asset('img/inspira.png') }}" class="me-3 w-25 h-auto" alt="Inspira Logo">
                 </a>
-                <div class="text-muted">
-                    <p class="mt-4">@lang('footer.contact')</p>
+                <div class="text-light">
+                    <p class="mt-4 text-decoration-underline">@lang('footer.contact')</p>
                     <div class="mt-3">
                         <p class="text-light mb-1">Email:</p>
-                        <p>inspiraumkm@gmail.com</p>
+                        <p class="text-light">inspiraumkm@gmail.com</p>
                     </div>
                     <div>
                         <p class="text-light mb-1">@lang('footer.time')</p>
-                        <p>08:00 - 21:00, @lang('footer.days')</p>
+                        <p class="text-light">08:00 - 21:00, @lang('footer.days')</p>
                     </div>
                 </div>
             </div>
@@ -33,6 +33,7 @@
                         <li><a href="{{ route('designs.product', ['product' => 'packaging']) }}" class="text-decoration-none text-light">@lang('footer.packaging')</a></li>
                         <li><a href="{{ route('designs.product', ['product' => 'banners']) }}" class="text-decoration-none text-light">@lang('footer.banner')</a></li>
                         <li><a href="{{ route('designs.product', ['product' => 'stickers']) }}" class="text-decoration-none text-light">@lang('footer.sticker')</a></li>
+                        <li><a href="{{ route('designs.product', ['product' => 'logo']) }}" class="text-decoration-none text-light">Logo</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-4">
@@ -55,7 +56,7 @@
             </div>
         </div>
         <div class="text-center mt-4">
-            <span class="text-muted">© 2024
+            <span class="text-light">© 2024
                 <a href="{{ route('home') }}" class="text-decoration-none text-light">Inspira UMKM</a>. All Rights Reserved.
             </span>
         </div>
